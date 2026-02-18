@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>로그인</title>
+</head>
+<body>
+  <h2>로그인</h2>
+
+  <input id="email" placeholder="이메일"><br><br>
+  <input id="pw" type="password" placeholder="비밀번호"><br><br>
+
+  <button onclick="login()">로그인</button>
+  <p id="msg"></p>
+
+  <p>계정 없으면 <a href="signup.html">회원가입</a></p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+ const firebaseConfig = {
+  apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
+  authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
+  projectId: "ace-baccarat-dfa2e",
+  storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
+  messagingSenderId: "609825096693",
+  appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
+  measurementId: "G-LRW1E07P1J"
+};
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.login = async function () {
+      const email = document.getElementById("email").value.trim();
+      const pw = document.getElementById("pw").value;
+      const msg = document.getElementById("msg");
+      msg.textContent = "로그인 중...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pw);
+        location.href = "home.html";
+      } catch (e) {
+        msg.textContent = "로그인 실패: " + (e?.message ?? e);
+      }
+    };
+  </script>
+</body>
+</html>
