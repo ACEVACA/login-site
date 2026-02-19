@@ -13,8 +13,8 @@
     --b:#e04848;
     --gold:#d6b25e;
 
-    --cardW: 104px;
-    --cardH: 148px;
+    --cardW: 86px;
+    --cardH: 122px;
 
     --safeX: 16px;
     --safeTop: 12px;
@@ -144,7 +144,7 @@
     left:50%;
     bottom: calc(var(--chipbarH) + 12px);
     transform: translateX(-50%);
-    width: min(860px, calc(100% - 60px));
+    width: min(1060px, calc(100% - 40px));
     height: 210px;
     pointer-events:none;
     z-index: 10;
@@ -156,7 +156,7 @@
       radial-gradient(900px 380px at 50% 20%, rgba(255,255,255,.18), transparent 60%),
       radial-gradient(800px 320px at 50% 120%, rgba(0,0,0,.28), transparent 55%),
       linear-gradient(180deg, rgba(40,8,8,.98), rgba(75,10,10,.96));
-    border: 1px solid rgba(255,255,255,.25);
+    border: 1px solid rgba(255,255,255,.16);
     box-shadow: 0 22px 80px rgba(0,0,0,.46);
     overflow:hidden;
   }
@@ -189,22 +189,24 @@
     display:grid;
     grid-template-columns: 1.2fr .9fr 1.2fr;
     border: 1px solid rgba(255,255,255,.14);
-    background: linear-gradient(180deg,#5b0f14,#2a0507);
+    background: rgba(0,0,0,.10);
   }
   .seg{
-  padding: 18px 20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:6px;
-}
+    position:relative;
+    padding: 12px 14px;
+    cursor:pointer;
+    user-select:none;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
   .seg:active{ transform: translateY(1px); }
   .seg.p{
     background: radial-gradient(320px 220px at 28% 35%, rgba(255,255,255,.18), transparent 62%),
                 linear-gradient(180deg, rgba(47,108,255,.46), rgba(47,108,255,.18));
   }
   .seg.t{
-    background: radial-gradient(320px 220px at 50% 35%, rgba(255,255,255,.25), transparent 62%),
+    background: radial-gradient(320px 220px at 50% 35%, rgba(255,255,255,.16), transparent 62%),
                 linear-gradient(180deg, rgba(24,167,111,.52), rgba(24,167,111,.18));
     align-items:center;
     text-align:center;
@@ -216,25 +218,49 @@
     text-align:right;
   }
   .segTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-  .segName{ font-weight: 1200; font-size: 15px; letter-spacing:.06em; }
+  .segName{ font-weight: 1100; font-size: 15px; letter-spacing:.02em; }
   .segOdds{ font-weight: 950; font-size: 12px; color: rgba(255,255,255,.82); }
-  .segAmt{ font-weight: 1200; font-size: 20px; font-variant-numeric: tabular-nums; letter-spacing:.02em; }
+  .segAmt{ font-weight: 1100; font-size: 20px; font-variant-numeric: tabular-nums; }
 
-          
-  .cardsArea{
+  .tableCards{
     position:absolute;
     left:50%;
-    bottom: calc(var(--chipbarH) + 120px);
+    bottom: 14px;
     transform: translateX(-50%);
-    width: min(860px, calc(100% - 60px));
     display:flex;
-    justify-content:space-between;
-    gap: 12px;
+    gap: 26px;
+    align-items:flex-end;
     pointer-events:none;
-    z-index: 20;
+    z-index: 13;
   }
-  .hand{ width: 48%; height: 220px; display:flex; align-items:flex-end; justify-content:center; }
-  .handRow{ display:flex; gap: 16px; align-items:flex-end; justify-content:center; min-height: calc(var(--cardH) + 8px); }
+  .miniHand{
+    width: 240px;
+    display:flex;
+    justify-content:center;
+    gap: 10px;
+  }
+  .miniLabel{
+    position:absolute;
+    left:50%;
+    transform: translateX(-50%);
+    bottom: 54px;
+    font-weight: 1000;
+    letter-spacing:.06em;
+    font-size: 11px;
+    opacity:.80;
+  }
+  .miniLabel.p{ left: calc(50% - 140px);}
+  .miniLabel.b{ left: calc(50% + 140px);}
+
+  .cardsArea{
+    position:absolute; left:0; right:0;
+    top: 164px;
+    display:flex; justify-content:center; gap: min(360px, 22vw);
+    pointer-events:none;
+    z-index: 6;
+  }
+  .hand{ width: min(520px, 46vw); height: 270px; display:flex; align-items:center; justify-content:center; }
+  .handRow{ display:flex; gap: 16px; align-items:center; justify-content:center; min-height: calc(var(--cardH) + 8px); }
 
   .cardSlot{
     width: var(--cardW);
@@ -264,7 +290,16 @@
   .cardFace.back{ transform: rotateY(0deg); }
   .cardFace.front{ transform: rotateY(180deg); }
 
-        
+  .miniCard{
+    width: 54px; height: 76px;
+    border-radius: 10px;
+    perspective: 700px;
+    position:relative;
+  }
+  .miniCard .cardInner{ transition: transform .42s ease; }
+  .miniCard.revealed .cardInner{ transform: rotateY(180deg); }
+  .miniCard .cardFace{ border-radius: 10px; box-shadow: 0 10px 18px rgba(0,0,0,.25); }
+
   .bottom{
     position:absolute; left:0; right:0; bottom:0;
     padding: 0 var(--safeX) var(--safeBottom);
@@ -279,8 +314,8 @@
     gap: 12px;
     padding: 10px 14px;
     border-radius: 999px;
-    background: #3b0c0c;
-    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(60,10,10,.98);
+    border: 1px solid rgba(255,255,255,.16);
     box-shadow: 0 18px 60px rgba(0,0,0,.45);
   }
   .chipRow{ display:flex; align-items:center; gap: 10px; flex-wrap:wrap; justify-content:center; }
@@ -326,7 +361,7 @@
     cursor:pointer;
     color: var(--white);
     background: rgba(255,255,255,.10);
-    border: 1px solid rgba(255,255,255,.25);
+    border: 1px solid rgba(255,255,255,.16);
     user-select:none;
     white-space:nowrap;
   }
@@ -340,19 +375,29 @@
     border-color: rgba(255,170,80,.52);
   }
 
-  
+  .extraBtnWrap{
+    position:absolute;
+    left:50%;
+    bottom: calc(var(--chipbarH) + 232px);
+    transform: translateX(-50%);
+    pointer-events:auto;
+    display:none;
+    z-index: 75;
+  }
+
   .bigRoadWrap{
     position:absolute;
     right: var(--safeX);
     bottom: calc(var(--chipbarH) + 6px);
-    width: 420px;
-    height: 120px;
-    border-radius: 12px;
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,.15);
-    box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    width: min(46vw, 560px);
+    height: 148px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(0,0,0,.12);
+    box-shadow: 0 18px 55px rgba(0,0,0,.30);
     overflow:hidden;
-    z-index: 60;
+    pointer-events:auto;
+    z-index: 14;
   }
   .roadTitle{ position:absolute; top:7px; left:10px; font-size:11px; font-weight: 950; color: rgba(0,0,0,.55); letter-spacing:.04em; }
   .grid{ position:absolute; inset: 24px 9px 9px 9px; display:grid; grid-template-columns: repeat(27, 1fr); grid-template-rows: repeat(6, 1fr);}
@@ -363,7 +408,7 @@
   .tieMark{ position:absolute; right:-2px; bottom:-2px; width: 7px; height: 7px; border-radius: 999px; background:#2c2c2c; border: 2px solid rgba(255,255,255,.88);}
 
   .bottomLeft{
-    position:absolute; left: var(--safeX); bottom: 6px;
+    position:absolute; left: var(--safeX); bottom: calc(var(--chipbarH) + 10px);
     display:flex; gap:10px;
     z-index: 70;
     pointer-events:auto;
@@ -391,8 +436,7 @@
     opacity:0;
     pointer-events:none;
     transition: opacity .18s ease, transform .18s ease;
-    border: 1px solid rgba(255,255,255,.25);
-    box-shadow: 0 26px 90px rgba(0,0,0,.55);
+    box-shadow: 0 22px 70px rgba(0,0,0,.45);
     z-index: 90;
   }
   .winBanner.show{ opacity:1; transform: translateX(-50%) translateY(0); }
@@ -453,161 +497,16 @@
     transform: translate(-50%,-50%);
   }
 
-  
-  .cardSlot.clickable{
-    pointer-events:auto;
-    cursor:pointer;
-    outline: 2px solid rgba(214,178,94,.45);
-    box-shadow: 0 18px 36px rgba(0,0,0,.28);
-  }
-  .cardSlot.clickable::after{
-    content:"CLICK";
-    position:absolute;
-    left:50%; top:-18px;
-    transform: translateX(-50%);
-    font-size: 10px;
-    font-weight: 1100;
-    letter-spacing:.18em;
-    color: rgba(255,222,100,.92);
-    text-shadow: 0 2px 10px rgba(0,0,0,.55);
-  }
-
-
   @media (max-width: 980px){
     .bigRoadWrap{display:none;}
     .casinoTable{width: calc(100% - 24px);}
     .cardsArea{top: 140px; gap: 10vw;}
   }
-
-  /* ===== Dummy Live2D Dealer (Replaceable) ===== */
-  .dealerWrap{
-    position:absolute;
-    left:50%;
-    top: 56px;
-    transform: translateX(-50%);
-    width: min(520px, 70vw);
-    height: 300px;
-    pointer-events:none;
-    z-index: 40;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-  }
-  .dealer{
-    width: 100%;
-    max-width: 520px;
-    height: 100%;
-    filter: drop-shadow(0 18px 32px rgba(0,0,0,.38));
-    transform-origin: 50% 80%;
-    animation: dealerBreath 3.6s ease-in-out infinite;
-  }
-  @keyframes dealerBreath{
-    0%,100%{ transform: translateY(0) scale(1); }
-    50%{ transform: translateY(2px) scale(1.004); }
-  }
-  .dealer .blink{
-    transform-origin: 50% 50%;
-    animation: dealerBlink 4.2s infinite;
-  }
-  @keyframes dealerBlink{
-    0%, 92%, 100%{ transform: scaleY(1); }
-    94%{ transform: scaleY(0.08); }
-    96%{ transform: scaleY(1); }
-  }
-
-  .dealer.dealAnim{ animation: dealerBreath 3.6s ease-in-out infinite, dealerNod .55s ease-out 1; }
-  @keyframes dealerNod{
-    0%{ transform: translateY(0) rotate(0deg); }
-    35%{ transform: translateY(1px) rotate(-1.2deg); }
-    100%{ transform: translateY(0) rotate(0deg); }
-  }
-
-  .dealer .handR{ transform-origin: 78% 72%; }
-  .dealer.dealAnim .handR{ animation: handDeal .6s cubic-bezier(.2,.9,.2,1) 1; }
-  @keyframes handDeal{
-    0%{ transform: translate(0px,0px) rotate(0deg); }
-    40%{ transform: translate(10px,8px) rotate(6deg); }
-    100%{ transform: translate(0px,0px) rotate(0deg); }
-  }
-
-  .dealer.winAnim .mouth{ opacity:1; }
-  .dealer.loseAnim .mouth{ opacity:.35; }
-  .dealer.winAnim{ animation: dealerBreath 3.6s ease-in-out infinite, dealerNod 0.55s ease-out 1; }
-
 </style>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
-
 </head>
 <body>
 <div class="stage">
   <div class="bg"></div>
-
-  <!-- Dummy Live2D Dealer (SVG placeholder). Replace later with real Live2D model. -->
-  <div class="dealerWrap" id="dealerWrap" aria-hidden="true">
-    <svg class="dealer" id="dealerSvg" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="skinGrad" cx="40%" cy="35%" r="70%">
-          <stop offset="0%" stop-color="#f2d2c7"/>
-          <stop offset="60%" stop-color="#d9a99d"/>
-          <stop offset="100%" stop-color="#c08f84"/>
-        </radialGradient>
-        <linearGradient id="dressGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#b31225"/>
-          <stop offset="100%" stop-color="#5f0a12"/>
-        </linearGradient>
-        <linearGradient id="hairGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#2a2122"/>
-          <stop offset="100%" stop-color="#0e0b0c"/>
-        </linearGradient>
-      </defs>
-
-      <path d="M120 300 C150 220, 190 190, 260 190 C330 190, 370 220, 400 300 Z" fill="url(#dressGrad)" opacity="0.98"/>
-      <path d="M190 205 C212 236, 308 236, 330 205 C315 190, 205 190, 190 205 Z" fill="#3a070c" opacity="0.55"/>
-      <path d="M220 206 C232 222, 288 222, 300 206 C286 198, 234 198, 220 206 Z" fill="#0b0b0c" opacity="0.35"/>
-
-      <path d="M240 200 C246 185, 274 185, 280 200 C276 215, 244 215, 240 200 Z" fill="url(#skinGrad)" opacity="0.98"/>
-      <ellipse cx="260" cy="142" rx="62" ry="72" fill="url(#skinGrad)"/>
-
-      <path d="M205 138 C205 90, 230 60, 260 60 C300 60, 330 92, 330 140
-               C330 150, 328 160, 324 172
-               C316 130, 298 110, 260 110
-               C222 110, 206 130, 196 175
-               C192 163, 205 152, 205 138 Z" fill="url(#hairGrad)"/>
-      <path d="M198 170 C190 140, 195 118, 210 105 C206 150, 206 176, 212 205
-               C204 198, 200 187, 198 170 Z" fill="#0b090a" opacity="0.8"/>
-      <path d="M322 170 C330 140, 325 118, 310 105 C314 150, 314 176, 308 205
-               C316 198, 320 187, 322 170 Z" fill="#0b090a" opacity="0.8"/>
-
-      <g class="blink">
-        <ellipse cx="236" cy="146" rx="12" ry="7" fill="#1b1b1e" opacity="0.92"/>
-        <ellipse cx="284" cy="146" rx="12" ry="7" fill="#1b1b1e" opacity="0.92"/>
-        <circle cx="232" cy="145" r="2" fill="#ffffff" opacity="0.55"/>
-        <circle cx="280" cy="145" r="2" fill="#ffffff" opacity="0.55"/>
-      </g>
-      <path d="M220 136 C230 128, 242 128, 252 136" stroke="#2c2324" stroke-width="3" stroke-linecap="round" opacity="0.25" fill="none"/>
-      <path d="M268 136 C278 128, 290 128, 300 136" stroke="#2c2324" stroke-width="3" stroke-linecap="round" opacity="0.25" fill="none"/>
-
-      <path d="M260 152 C255 160, 256 168, 262 172" stroke="#8f5f55" stroke-width="3" stroke-linecap="round" opacity="0.35" fill="none"/>
-      <path class="mouth" d="M242 184 C252 190, 268 190, 278 184" stroke="#5a1f25" stroke-width="4" stroke-linecap="round" opacity="0.65" fill="none"/>
-
-      <path d="M160 270 C190 240, 210 230, 232 232 C240 240, 238 252, 226 258
-               C210 266, 190 280, 170 292 Z" fill="url(#dressGrad)" opacity="0.96"/>
-      <path d="M220 254 C230 252, 240 256, 246 265 C232 270, 220 270, 214 264 Z" fill="url(#skinGrad)" opacity="0.98"/>
-
-      <g class="handR">
-        <path d="M360 270 C332 242, 310 232, 290 232 C282 240, 284 252, 296 258
-                 C312 266, 332 280, 350 292 Z" fill="url(#dressGrad)" opacity="0.96"/>
-        <path d="M300 254 C290 252, 280 256, 274 265 C288 270, 300 270, 306 264 Z" fill="url(#skinGrad)" opacity="0.98"/>
-        <rect x="262" y="246" rx="6" ry="6" width="34" height="44" fill="#ffffff" opacity="0.92"/>
-        <rect x="266" y="250" rx="4" ry="4" width="26" height="10" fill="#d6b25e" opacity="0.6"/>
-      </g>
-
-      <path d="M140 300 C168 238, 210 214, 260 214 C310 214, 352 238, 380 300"
-            stroke="rgba(255,255,255,.14)" stroke-width="6" opacity="0.7" fill="none"/>
-    </svg>
-  </div>
-
 
   <div class="titleBar">
     <div class="pin"></div>
@@ -647,7 +546,12 @@
       <div class="winLine3" id="winLine3">₩0</div>
     </div>
   </div>
-<div class="cardsArea">
+
+  <div class="extraBtnWrap" id="extraBtnWrap">
+    <button class="btn warn" id="btnRevealExtra">엑스트라 카드 공개</button>
+  </div>
+
+  <div class="cardsArea">
     <div class="hand"><div class="handRow" id="playerCards"></div></div>
     <div class="hand"><div class="handRow" id="bankerCards"></div></div>
   </div>
@@ -664,11 +568,7 @@
           </div>
           <div class="segTop">
             <div class="segAmt" id="betP">₩0</div>
-            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><span style="opacity:.85;">P PAIR</span><span id="betPP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span></div>
-          </div>
-
-          <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
-            <button class="btn" style="padding:7px 10px; font-size:12px;" data-zone="PP">P 페어</button>
+            <div class="segOdds">P PAIR</div>
           </div>
         </div>
 
@@ -686,21 +586,20 @@
 
         <div class="seg b" data-zone="B">
           <div class="segTop">
-            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-start;"><span id="betBP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span><span style="opacity:.85;">B PAIR</span></div>
+            <div class="segOdds">B PAIR</div>
             <div class="segName">BANKER</div>
           </div>
           <div class="segTop">
             <div class="segOdds">1 : 1 (5%)</div>
             <div class="segAmt" id="betB">₩0</div>
           </div>
-
-          <div style="display:flex;gap:10px;align-items:center;justify-content:flex-start;">
-            <button class="btn" style="padding:7px 10px; font-size:12px;" data-zone="BP">B 페어</button>
-          </div>
         </div>
       </div>
     </div>
-<div class="miniLabel b">BANKER</div>
+
+    <div class="tableCards">
+      <div class="miniLabel p">PLAYER</div>
+      <div class="miniLabel b">BANKER</div>
       <div class="miniHand" id="miniPlayer"></div>
       <div class="miniHand" id="miniBanker"></div>
     </div>
@@ -717,7 +616,7 @@
       <div class="statVal" id="uiBalance">₩0</div>
     </div>
     <div class="statPill">
-      <div class="statLabel">베팅 결과</div>
+      <div class="statLabel">이전 결과</div>
       <div class="statVal gold" id="uiLast">₩0</div>
     </div>
   </div>
@@ -737,58 +636,14 @@
       </div>
 
       <button class="btn" id="btnX2">×2</button>
-</div>
-  
-  <div id="autoStart" style="
-    position:absolute; left:50%; top:50%;
-    transform: translate(-50%,-50%);
-    width: 160px; height: 160px;
-    border-radius: 999px;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap: 6px;
-    background: rgba(0,0,0,.68);
-    border: 1px solid rgba(255,255,255,.25);
-    box-shadow: 0 24px 90px rgba(0,0,0,.55);
-    z-index: 95;
-    pointer-events:none;
-  ">
-    <div style="font-weight:1100; letter-spacing:.14em; font-size: 12px; opacity:.86;">자동 시작</div>
-    <div id="autoNum" style="font-weight:1200; font-size: 56px; line-height:1; color: rgba(255,222,100,.94);">10</div>
-    <div style="font-weight:950; font-size: 12px; opacity:.72;">초 후 딜</div>
+      <button class="btn gold" id="btnDeal">딜</button>
+    </div>
   </div>
-
-
-</div>
-
-  <div id="sidePairLeft" style="position:absolute; left:40px; bottom: calc(var(--chipbarH) + 140px); width:140px; padding:16px; border-radius:14px; background:#1c1c1c; border:1px solid rgba(255,255,255,.1); text-align:center;">
-    <div style="font-weight:900; letter-spacing:.1em;">PLAYER PAIR</div>
-    <div style="margin-top:6px; font-size:13px; opacity:.7;">11:1</div>
-  </div>
-  <div id="sidePairRight" style="position:absolute; right:40px; bottom: calc(var(--chipbarH) + 140px); width:140px; padding:16px; border-radius:14px; background:#1c1c1c; border:1px solid rgba(255,255,255,.1); text-align:center;">
-    <div style="font-weight:900; letter-spacing:.1em;">BANKER PAIR</div>
-    <div style="margin-top:6px; font-size:13px; opacity:.7;">11:1</div>
-  </div>
-
 </div>
 
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  // ===== Dummy Live2D Dealer Hooks =====
-  const dealerSvg = document.getElementById("dealerSvg");
-  function dealerPulse(cls, ms){
-    if(!dealerSvg) return;
-    dealerSvg.classList.remove("dealAnim","winAnim","loseAnim");
-    dealerSvg.classList.add(cls);
-    setTimeout(() => dealerSvg && dealerSvg.classList.remove(cls), ms);
-  }
-  function dealerDeal(){ dealerPulse("dealAnim", 650); }
-  function dealerWin(){ dealerPulse("winAnim", 900); }
-  function dealerLose(){ dealerPulse("loseAnim", 700); }
-
   const $$ = (s) => Array.from(document.querySelectorAll(s));
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
   const fmt = (n) => "₩" + Math.round(n).toLocaleString("ko-KR");
@@ -829,7 +684,7 @@
   const winLine3 = $("#winLine3");
   let bannerTimer = null;
 
-  function showBanner(resultKey, isWin, betAmt, gainAmt, pairFlags, betSnap){
+  function showBanner(resultKey, isWin, betAmt, gainAmt){
     const isP = resultKey === "P";
     const isB = resultKey === "B";
     const isT = resultKey === "T";
@@ -839,9 +694,6 @@
     if(isB) winTop.classList.add("b");
     if(isT) winTop.classList.add("t");
 
-    // 딜러 리액션
-    if(isWin) dealerWin(); else dealerLose();
-
     // 패배 시: PLAYER/BANKER만
     if(!isWin){
       winLine1.textContent = "";
@@ -849,11 +701,7 @@
       winLine3.textContent = "";
     } else {
       winLine1.textContent = "이겼습니다";
-      const pp = (pairFlags && pairFlags.isPPair) ? (betSnap?.PP||0) : 0;
-      const bp = (pairFlags && pairFlags.isBPair) ? (betSnap?.BP||0) : 0;
-      const pairGain = (pp ? (pp*11 - pp) : 0) + (bp ? (bp*11 - bp) : 0);
-      const mainGain = Math.max(0, gainAmt - pairGain);
-      winLine2.textContent = "일반승리 " + fmt(mainGain) + " · 페어승리 " + fmt(pairGain) + " · 총베팅 " + fmt(betAmt);
+      winLine2.textContent = "베팅 " + fmt(betAmt) + " + 획득 " + fmt(gainAmt) + " =";
       winLine3.textContent = fmt(betAmt + gainAmt);
     }
 
@@ -863,12 +711,13 @@
   }
 
   // ===== 잔액 =====
-  let balance = 100000;
-  let lastWin = 0;
+  let balance = 1000000;
+  let lastDelta = 0;
   function syncStats(){
     $("#uiBalance").textContent = fmt(balance);
-    $("#uiLast").textContent = fmt(lastWin);
-    $("#uiLast").style.color = "rgba(255,222,100,.94)";
+    const sign = lastDelta >= 0 ? "+" : "";
+    $("#uiLast").textContent = (lastDelta === 0) ? fmt(0) : (sign + fmt(Math.abs(lastDelta)));
+    $("#uiLast").style.color = lastDelta >= 0 ? "rgba(255,222,100,.94)" : "rgba(255,120,120,.92)";
   }
   syncStats();
 
@@ -947,63 +796,18 @@
   }
 
   // ===== 베팅 =====
-  // ===== Auto Start (10s) =====
-  const autoStart = document.getElementById("autoStart");
-  const autoNum = document.getElementById("autoNum");
-  let autoTimer = null;
-  let autoRemaining = 10;
-  function stopAuto(){
-    if(autoTimer){ clearInterval(autoTimer); autoTimer = null; }
-    autoRemaining = 10;
-    if(autoStart) autoStart.style.display = "none";
-  }
-  function startAutoIfReady(){
-    if(inRound || pendingExtra) return;
-    if(totalBet() <= 0) { stopAuto(); return; }
-    if(autoTimer) return;
-    autoRemaining = 10;
-    if(autoStart){ autoStart.style.display = "flex"; autoNum.textContent = String(autoRemaining); }
-    autoTimer = setInterval(() => {
-      if(inRound || pendingExtra){ stopAuto(); return; }
-      if(totalBet() <= 0){ stopAuto(); return; }
-      autoRemaining -= 1;
-      if(autoStart) autoNum.textContent = String(autoRemaining);
-      if(autoRemaining <= 0){
-        stopAuto();
-        dealerDeal();
-        dealRound();
-      }
-    }, 1000);
-  }
-
-  // ===== Single-zone betting lock =====
-  let lockedZone = null; // "P" | "B" | "T"
-  function lockCheck(zone){
-    if(!lockedZone) return true;
-    if(zone === "PP") return lockedZone === "P";
-    if(zone === "BP") return lockedZone === "B";
-    return zone === lockedZone;
-  }
-
   let chipValue = 1000;
-  let bet = {P:0, T:0, B:0, PP:0, BP:0};
+  let bet = {P:0, T:0, B:0};
   const stack = [];
-  function totalBet(){ return bet.P + bet.T + bet.B + bet.PP + bet.BP; }
+  function totalBet(){ return bet.P + bet.T + bet.B; }
 
   const elBetP = $("#betP"), elBetT = $("#betT"), elBetB = $("#betB");
-  const elBetPP = document.getElementById("betPP");
-  const elBetBP = document.getElementById("betBP");
   function syncBets(){
     elBetP.textContent = fmt(bet.P);
     elBetT.textContent = fmt(bet.T);
     elBetB.textContent = fmt(bet.B);
-    if(elBetPP) elBetPP.textContent = fmt(bet.PP);
-    if(elBetBP) elBetBP.textContent = fmt(bet.BP);
   }
   syncBets();
-  startAutoIfReady();
-    stopAuto();
-    setTimeout(() => { clearHands(); }, 1700);
 
   function createFlyChip(fromEl, toEl, label){
     const from = fromEl.getBoundingClientRect();
@@ -1040,11 +844,9 @@
   let roundState = null;
 
   function placeBet(zone, amt, anchorEl){
-    if(!lockCheck(zone)) return;
     if(inRound) return;
     if(balance < amt) return;
 
-    if(!lockedZone && (zone==="P"||zone==="B"||zone==="T")) lockedZone = zone;
     balance -= amt;
     bet[zone] += amt;
     stack.push({type:"bet", zone:zone, amt:amt});
@@ -1054,14 +856,9 @@
     const chipEl = document.querySelector("#chips .chip.active") || document.querySelector("#chips .chip");
     const label = (amt >= 1000000) ? "1M" : (amt >= 1000 && amt < 10000 ? String(amt) : (amt>=1000 ? (amt/1000)+"k" : String(amt)));
     if(chipEl && anchorEl) createFlyChip(chipEl, anchorEl, label);
-    startAutoIfReady();
   }
 
-  $$(".seg").forEach(seg => seg.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-zone]");
-    if(btn){ e.stopPropagation(); placeBet(btn.dataset.zone, chipValue, btn); return; }
-    placeBet(seg.dataset.zone, chipValue, seg);
-  }));
+  $$(".seg").forEach(seg => seg.addEventListener("click", () => placeBet(seg.dataset.zone, chipValue, seg)));
 
   $("#chips").addEventListener("click", (e) => {
     const chip = e.target.closest(".chip");
@@ -1078,10 +875,8 @@
     if(!last) return;
     if(last.type === "bet"){
       bet[last.zone] -= last.amt;
-      if((bet.P+bet.B+bet.T) === 0) lockedZone = null;
       balance += last.amt;
       syncBets(); syncStats();
-      startAutoIfReady();
       return;
     }
     // chip undo
@@ -1108,20 +903,22 @@
     const cost = totalBet();
     if(balance < cost) return;
     balance -= cost;
-    bet.P *= 2; bet.T *= 2; bet.B *= 2; bet.PP *= 2; bet.BP *= 2;
+    bet.P *= 2; bet.T *= 2; bet.B *= 2;
     stack.push({type:"x2", cost: cost});
     syncBets(); syncStats();
-    startAutoIfReady();
   });
 
   // ===== 카드 슬롯 =====
   const elPlayerCards = $("#playerCards");
-  const elBankerCards = $("#bankerCards");  const extraWrap = $("#extraBtnWrap");
-  const /*btnRevealExtra*/ = $("#/*btnRevealExtra*/");
+  const elBankerCards = $("#bankerCards");
+  const miniP = $("#miniPlayer");
+  const miniB = $("#miniBanker");
+  const extraWrap = $("#extraBtnWrap");
+  const btnRevealExtra = $("#btnRevealExtra");
 
-  function makeSlot(sideways){
+  function makeSlot(sideways, isMini){
     const slot = document.createElement("div");
-    slot.className = "cardSlot" + (sideways ? " sideways" : "");
+    slot.className = (isMini ? "miniCard" : "cardSlot") + (sideways ? " sideways" : "");
     const inner = document.createElement("div");
     inner.className = "cardInner";
 
@@ -1152,7 +949,6 @@
   }
 
   async function revealSlot(slotObj, card){
-    dealerDeal();
     await sleep(600);
     slotObj.frontImg.src = CARD_BASE + cardFrontFile(card.rank, card.suit);
     slotObj.slot.classList.add("revealed");
@@ -1242,35 +1038,29 @@
     if(bTotal > pTotal) return "B";
     return "T";
   }
-  function payoutFor(result, betSnap, pairFlags){
+  function payoutFor(result, betSnap){
     let payout = 0;
     if(result === "P") payout += betSnap.P * 2;
     if(result === "B") payout += betSnap.B * 1.95;
     if(result === "T") payout += betSnap.T * 9;
-    // Pair payout: "원금의 11배" (total return = bet*11)
-    if(pairFlags && pairFlags.isPPair && betSnap.PP) payout += betSnap.PP * 11;
-    if(pairFlags && pairFlags.isBPair && betSnap.BP) payout += betSnap.BP * 11;
     return payout;
   }
   function settle(result){
     const betSnap = roundState ? roundState.betSnapshot : {P:0,T:0,B:0};
     const tb = roundState ? roundState.totalBet : 0;
 
-    const pairFlags = { isPPair: !!roundState?.isPPair, isBPair: !!roundState?.isBPair };
-    const payout = payoutFor(result, betSnap, pairFlags);
+    const payout = payoutFor(result, betSnap);
     const win = payout > 0;
     const delta = win ? (payout - tb) : (-tb);
     balance += payout;
 
-    if(win) lastWin = Math.max(0, delta);
+    lastDelta = delta;
     syncStats();
     addLog({ res: result, bet: tb, win: win, delta: delta, time: nowTime() });
 
-    const gain = Math.max(0, payout - tb);
-    showBanner(result, win, tb, gain, pairFlags, betSnap);
+    showBanner(result, win, tb, Math.max(0, payout - tb));
 
-    bet = {P:0,T:0,B:0,PP:0,BP:0};
-    lockedZone = null;
+    bet = {P:0,T:0,B:0};
     syncBets();
   }
 
@@ -1281,7 +1071,6 @@
     inRound = true;
 
     winBanner.classList.remove("show");
-    stopAuto();
     extraWrap.style.display = "none";
     pendingExtra = null;
     roundState = null;
@@ -1291,10 +1080,10 @@
     const betSnapshot = {P: bet.P, T: bet.T, B: bet.B};
     const tb = totalBet();
 
-    const P1 = makeSlot(false); elPlayerCards.appendChild(P1.slot);
-    const P2 = makeSlot(false); elPlayerCards.appendChild(P2.slot);
-    const B1 = makeSlot(false); elBankerCards.appendChild(B1.slot);
-    const B2 = makeSlot(false); elBankerCards.appendChild(B2.slot);
+    const P1 = makeSlot(false,false); elPlayerCards.appendChild(P1.slot);
+    const P2 = makeSlot(false,false); elPlayerCards.appendChild(P2.slot);
+    const B1 = makeSlot(false,false); elBankerCards.appendChild(B1.slot);
+    const B2 = makeSlot(false,false); elBankerCards.appendChild(B2.slot);
 
     const mP1 = makeSlot(false,true); miniP.appendChild(mP1.slot);
     const mP2 = makeSlot(false,true); miniP.appendChild(mP2.slot);
@@ -1312,8 +1101,6 @@
 
     let pTotal = sumHand(player);
     let bTotal = sumHand(banker);
-    const isPPair = (player[0].rank === player[1].rank);
-    const isBPair = (banker[0].rank === banker[1].rank);
     const natural = (pTotal >= 8 || bTotal >= 8);
 
     const extra = { p:null, b:null };
@@ -1322,7 +1109,7 @@
       if(shouldPlayerDraw(pTotal)){
         const c = draw();
         player.push(c);
-        const slotBig = makeSlot(true); elPlayerCards.appendChild(slotBig.slot);
+        const slotBig = makeSlot(true,false); elPlayerCards.appendChild(slotBig.slot);
         const slotMini = makeSlot(true,true); miniP.appendChild(slotMini.slot);
         extra.p = {card:c, big:slotBig, mini:slotMini};
       }
@@ -1330,7 +1117,7 @@
       if(shouldBankerDraw(bTotal, extra.p ? extra.p.card.val : null)){
         const c = draw();
         banker.push(c);
-        const slotBig = makeSlot(true); elBankerCards.appendChild(slotBig.slot);
+        const slotBig = makeSlot(true,false); elBankerCards.appendChild(slotBig.slot);
         const slotMini = makeSlot(true,true); miniB.appendChild(slotMini.slot);
         extra.b = {card:c, big:slotBig, mini:slotMini};
       }
@@ -1338,7 +1125,7 @@
       // 엑스트라 존재 -> 클릭 공개 대기
       if(extra.p || extra.b){
         pendingExtra = extra;
-        roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb, isPPair:isPPair, isBPair:isBPair};
+        roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb};
         extraWrap.style.display = "block";
         inRound = false;
         return;
@@ -1346,7 +1133,7 @@
     }
 
     // 엑스트라 없음 -> 0.3초 후 결과
-    roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb, isPPair:isPPair, isBPair:isBPair};
+    roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb};
     const res = resultOf(pTotal, bTotal);
     bigPush(res); renderBig();
     await sleep(300);
@@ -1355,9 +1142,9 @@
     inRound = false;
   }
 
-  $("#btnDeal").addEventListener("click", () => { dealerDeal(); dealRound(); });
+  $("#btnDeal").addEventListener("click", dealRound);
 
-  /*btnRevealExtra*/.addEventListener("click", async () => { dealerDeal();
+  btnRevealExtra.addEventListener("click", async () => {
     if(inRound) return;
     if(!pendingExtra || !roundState) return;
     inRound = true;
@@ -1385,43 +1172,6 @@
     roundState = null;
     inRound = false;
   });
-
-
-  // Click-to-reveal extra cards (instead of a button)
-  document.addEventListener("click", async (e) => {
-    const target = e.target.closest(".cardSlot.clickable");
-    if(!target) return;
-    if(inRound) return;
-    if(!pendingExtra || !roundState) return;
-
-    inRound = true;
-    if(pendingExtra.p) pendingExtra.p.big.slot.classList.remove("clickable");
-    if(pendingExtra.b) pendingExtra.b.big.slot.classList.remove("clickable");
-
-    dealerDeal();
-
-    if(pendingExtra.p){
-      await revealSlot(pendingExtra.p.big, pendingExtra.p.card);
-    }
-    if(pendingExtra.b){
-      await revealSlot(pendingExtra.b.big, pendingExtra.b.card);
-    }
-
-    const pTotal = sumHand(roundState.player);
-    const bTotal = sumHand(roundState.banker);
-    const res = resultOf(pTotal, bTotal);
-
-    bigPush(res); renderBig();
-    await sleep(300);
-    settle(res);
-
-    pendingExtra = null;
-    roundState = null;
-    inRound = false;
-
-    startAutoIfReady();
-  });
-
 
 })();
 </script>
