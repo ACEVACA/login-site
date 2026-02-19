@@ -746,6 +746,20 @@
       white-space: nowrap;
     }
 
+  
+    /* ===== UI 안 보이는 현상 방지(레이어/배치 고정) ===== */
+    .stage{ align-items:flex-start; }        /* 가운데 정렬 때문에 아래 UI가 화면 밖으로 밀리는 경우 방지 */
+    .frame{ margin-top:12px; }
+
+    .video{ z-index:5; }
+    .tableWrap{ z-index:10; }
+    .hud{ z-index:15; }
+
+    /* 비디오 패널과 테이블이 겹치지 않게 조금 아래로 */
+    .tableWrap{
+      bottom:calc(var(--hudH) + 16px);
+    }
+
   </style>
 </head>
 
