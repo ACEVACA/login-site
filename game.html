@@ -1,83 +1,87 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>코리안 바카라 A</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACE 바카라 - Evolution 2D 스타일</title>
 <style>
-  body{margin:0;background:#07070a;color:#fff;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans KR',Arial}
-  .betTimer{position:absolute;left:50%;top:320px;transform:translateX(-50%);
-    width:86px;height:86px;border-radius:50%;display:grid;place-items:center;
-    background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2)}
-  .betTimer .num{font-size:32px;font-weight:900;line-height:1}
-  .resultBanner{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);
-    background:rgba(0,0,0,.7);padding:20px 26px;border-radius:10px;
-    border:1px solid rgba(255,255,255,.2);display:none;min-width:260px;text-align:center}
-  .resultBanner.show{display:block}
-  .resultBanner .top{font-weight:900;letter-spacing:.2em;opacity:.95}
-  .resultBanner .mid{margin-top:6px;opacity:.85}
-  .resultBanner .amt{margin-top:6px;font-size:28px;font-weight:900}
+body{margin:0;font-family:sans-serif;background:#8a6d58;color:#fff;overflow:hidden}
+.table{position:absolute;inset:0;background:linear-gradient(#8a6d58,#7b5f4d)}
+.center{position:absolute;top:25%;left:0;right:0;display:flex;justify-content:center;gap:200px}
+.title{font-size:60px;font-weight:900;opacity:.8;font-family:serif}
+.cards{position:absolute;top:40%;left:0;right:0;display:flex;justify-content:center;gap:220px}
+.hand{display:flex;gap:12px}
+.card{width:60px;height:85px;background:#fff;border-radius:8px;color:#000;
+display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
+.bottom{position:absolute;bottom:0;left:0;right:0;background:#111;padding:15px;display:flex;justify-content:center;gap:20px}
+.zone{padding:15px 25px;border-radius:20px;font-weight:900;cursor:pointer}
+.player{background:#2f6cff}
+.tie{background:#0f8f62}
+.banker{background:#e04848}
 </style>
 </head>
 <body>
+<div class="table"></div>
 
-<div class="betTimer" id="betTimer">
-  <svg viewBox="0 0 100 100" width="70" height="70" aria-hidden="true">
-    <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,.18)" stroke-width="8" fill="none"/>
-    <circle cx="50" cy="50" r="40" stroke="#22c55e" stroke-width="8"
-            stroke-dasharray="60 220" stroke-linecap="round" fill="none">
-      <animateTransform attributeName="transform"
-        type="rotate" from="0 50 50" to="360 50 50" dur="1s" repeatCount="indefinite"/>
-    </circle>
-  </svg>
-  <div class="num" id="betTimerNum">11</div>
+<div class="center">
+  <div class="title">PLAYER</div>
+  <div class="title">BANKER</div>
 </div>
 
-<div class="resultBanner" id="resultBanner">
-  <div class="top" id="rbTopText">플레이어</div>
-  <div class="mid" id="rbLine1">이겼습니다</div>
-  <div class="amt" id="rbAmount">₩0</div>
+<div class="cards">
+  <div class="hand" id="player"></div>
+  <div class="hand" id="banker"></div>
+</div>
+
+<div class="bottom">
+  <div class="zone player" onclick="bet('P')">플레이어</div>
+  <div class="zone tie" onclick="bet('T')">무</div>
+  <div class="zone banker" onclick="bet('B')">뱅커</div>
+  <div class="zone" style="background:#444" onclick="deal()">딜</div>
 </div>
 
 <script>
-  const sleep = (ms)=> new Promise(r=>setTimeout(r,ms));
-
-  let betCountdown = 11;
-  let timerInt = null;
-
-  function setBetTimerVisible(show){
-    document.getElementById("betTimer").style.display = show ? "grid" : "none";
-  }
-
-  function startBettingPhase(){
-    betCountdown = 11;
-    document.getElementById("betTimerNum").textContent = betCountdown;
-    setBetTimerVisible(true);
-
-    if(timerInt) clearInterval(timerInt);
-    timerInt = setInterval(async ()=>{
-      betCountdown--;
-      document.getElementById("betTimerNum").textContent = betCountdown;
-      if(betCountdown <= 0){
-        clearInterval(timerInt);
-        await sleep(600);
-        setBetTimerVisible(false);
-        showResult("플레이어", 220000);
+let shoe=[];
+const suits=["♦","♥","♣","♠"];
+const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+function newShoe(){
+  shoe=[];
+  for(let d=0;d<6;d++){
+    for(let s of suits){
+      for(let r of ranks){
+        shoe.push(r+s);
       }
-    }, 1000);
+    }
   }
+  shoe.sort(()=>Math.random()-0.5);
+}
+newShoe();
 
-  function showResult(winner, amount){
-    const banner = document.getElementById("resultBanner");
-    document.getElementById("rbTopText").textContent = winner;
-    document.getElementById("rbLine1").textContent = "이겼습니다";
-    document.getElementById("rbAmount").textContent = "₩" + Number(amount).toLocaleString("ko-KR");
-    banner.classList.add("show");
-    setTimeout(()=>banner.classList.remove("show"), 3000);
-  }
+function draw(){
+  if(shoe.length<10)newShoe();
+  return shoe.pop();
+}
 
-  startBettingPhase();
+function deal(){
+  document.getElementById("player").innerHTML="";
+  document.getElementById("banker").innerHTML="";
+  let p1=draw(),p2=draw(),b1=draw(),b2=draw();
+  addCard("player",p1);
+  addCard("player",p2);
+  addCard("banker",b1);
+  addCard("banker",b2);
+}
+
+function addCard(id,txt){
+  let c=document.createElement("div");
+  c.className="card";
+  c.textContent=txt;
+  document.getElementById(id).appendChild(c);
+}
+
+function bet(x){
+  alert(x+" 베팅");
+}
 </script>
-
 </body>
 </html>
