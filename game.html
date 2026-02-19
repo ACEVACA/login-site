@@ -498,25 +498,17 @@
       cursor:not-allowed;
     }
 
-    /* 배팅 종료 타이머(중앙) */
+    /* 배팅 종료 타이머(중앙 원형) */
     .betTimer{
       position:absolute;
       left:50%;
-      bottom:calc(var(--hudH) + 170px);
-      transform:translateX(-50%);
-      width:min(520px, 92%);
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        radial-gradient(420px 140px at 30% 20%, rgba(255,255,255,.08), transparent 70%),
-        rgba(0,0,0,.55);
-      box-shadow:0 22px 70px rgba(0,0,0,.65);
-      backdrop-filter: blur(10px);
-      padding:12px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      top:52%;
+      transform:translate(-50%,-50%);
+      width:92px;
+      height:92px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
       z-index:16;
       opacity:0;
       pointer-events:none;
@@ -524,7 +516,49 @@
     }
     .betTimer.show{
       opacity:1;
-      transform:translateX(-50%) translateY(-6px);
+      transform:translate(-50%,-50%) scale(1.02);
+    }
+    .betTimer .ring{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background: rgba(0,0,0,.32);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 22px 70px rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      overflow:hidden;
+    }
+    .betTimer .ring::after{
+      /* 회전하는 초록 라인(링) */
+      content:"";
+      position:absolute;
+      inset:-8px;
+      border-radius:999px;
+      background:
+        conic-gradient(from 0deg,
+          rgba(34,197,94,0) 0deg 250deg,
+          rgba(34,197,94,.95) 250deg 320deg,
+          rgba(34,197,94,0) 320deg 360deg
+        );
+      filter: blur(.2px);
+      animation: spin 1.1s linear infinite;
+      opacity:.95;
+      -webkit-mask:
+        radial-gradient(farthest-side, transparent calc(50% - 9px), #000 calc(50% - 8px));
+              mask:
+        radial-gradient(farthest-side, transparent calc(50% - 9px), #000 calc(50% - 8px));
+    }
+    .betTimer .num{
+      position:relative;
+      font-weight:1200;
+      font-size:30px;
+      color:#fff;
+      text-shadow:0 10px 22px rgba(0,0,0,.55);
+      letter-spacing:.02em;
+    }
+    @keyframes spin{
+      0%{ transform: rotate(0deg); }
+      100%{ transform: rotate(360deg); }
     }
     .betTimer .title{
       font-weight:1000;
@@ -721,8 +755,7 @@
       .tableWrap{ height:290px; }
       .chip{ width:56px; height:56px; }
       .resultBanner{ top:42%; }
-      .betTimer{ bottom:340px; }
-    }
+          }
   
 
     /* ===== 점수(숫자합) 배지 ===== */
@@ -839,6 +872,25 @@
       50%{ transform: translateY(-2px) scale(1.25); }
     }
 
+  
+    /* ===== 점수(숫자합) - 숫자만 표시 ===== */
+    .scoreNum{
+      position:absolute;
+      top:44%;
+      transform:translateY(-50%);
+      font-weight:1200;
+      font-size:34px;
+      color:#fff;
+      text-shadow:0 14px 30px rgba(0,0,0,.65);
+      opacity:0;
+      transition: opacity .18s ease;
+      pointer-events:none;
+      z-index:6;
+    }
+    .scoreNum.show{ opacity:1; }
+    .scoreNum.player{ left:66%; }  /* PLAYER 영역 안쪽 */
+    .scoreNum.banker{ right:66%; } /* BANKER 영역 안쪽 */
+
   </style>
 </head>
 
@@ -860,10 +912,13 @@
         <div class="limit">LIMIT <b>₩1,000</b> ~ <b>₩30,000,000</b></div>
       </div>
 
-      <!-- 중앙 베팅 타이머 -->
+      <!-- 중앙 베팅 타이머(원형) -->
       <div class="betTimer" id="betTimer">
-        <div class="title" id="betTimerTitle">베팅 종료까지</div>
-        <div class="time" id="betTimerNum">11</div>
+        <div class="ring"></div>
+        <div class="num" id="betTimerNum">11</div>
+      </div>
+
+<div class="time" id="betTimerNum">11</div>
       </div>
 
       <!-- 결과 배너 -->
@@ -892,7 +947,7 @@
               <div class="zoneHeader">PLAYER</div>
               <div class="odds">1:1</div>
               <div class="betTotal">베팅: <b id="betPlayer">0</b></div>
-              <div class="scoreBadge scoreP" id="scoreP">0</div>
+              <div class="scoreNum player" id="scoreP">0</div>
               <div class="cardRow" id="rowPlayer">
                 <div class="cardSlot" data-slot="p0"></div>
                 <div class="cardSlot" data-slot="p1"></div>
@@ -905,8 +960,7 @@
               <div class="zoneHeader">TIE</div>
               <div class="odds">8:1</div>
               <div class="betTotal">베팅: <b id="betTie">0</b></div>
-              <div class="scoreBadge scoreT" id="scoreT">0</div>
-              <div class="cardRow" id="rowTie"></div>
+<div class="cardRow" id="rowTie"></div>
               <div id="chipTie"></div>
             </div>
 
@@ -914,7 +968,7 @@
               <div class="zoneHeader">BANKER</div>
               <div class="odds">1:0.95</div>
               <div class="betTotal">베팅: <b id="betBanker">0</b></div>
-              <div class="scoreBadge scoreB" id="scoreB">0</div>
+              <div class="scoreNum banker" id="scoreB">0</div>
               <div class="cardRow" id="rowBanker">
                 <div class="cardSlot" data-slot="b0"></div>
                 <div class="cardSlot" data-slot="b1"></div>
@@ -1046,13 +1100,11 @@ refreshMoneyUI();
 function setScoreBadges(p, b){
   const sp = document.getElementById("scoreP");
   const sb = document.getElementById("scoreB");
-  const st = document.getElementById("scoreT");
   if(sp){ sp.textContent = String(p ?? 0); sp.classList.add("show"); }
   if(sb){ sb.textContent = String(b ?? 0); sb.classList.add("show"); }
-  if(st){ st.textContent = String(((p??0)+(b??0))%10); st.classList.add("show"); } // 가운데 느낌(원하면 제거 가능)
 }
 function hideScoreBadges(){
-  ["scoreP","scoreB","scoreT"].forEach(id=>{
+  ["scoreP","scoreB"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.classList.remove("show");
   });
@@ -1410,8 +1462,7 @@ function startBettingPhase(){
   refreshMoneyUI();
 
   betCountdown = 11;
-  document.getElementById("betTimerTitle").textContent = "베팅 종료까지";
-  document.getElementById("betTimerNum").textContent = String(betCountdown);
+    document.getElementById("betTimerNum").textContent = String(betCountdown);
   setBetTimerVisible(true);
 
   // 버튼 활성
@@ -1426,8 +1477,7 @@ function startBettingPhase(){
       clearInterval(timerInt);
       bettingOpen = false;
 
-      document.getElementById("betTimerTitle").textContent = "베팅 종료";
-      document.getElementById("betTimerNum").textContent = "0";
+            document.getElementById("betTimerNum").textContent = "0";
 
       // 베팅 잠금
       document.getElementById("btnUndo").disabled = true;
