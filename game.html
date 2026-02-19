@@ -990,7 +990,9 @@ function chipLabel(v){
 
 function buildChipRack(){
   const rack = document.getElementById("chipRack");
+  if(!rack) return;
   rack.innerHTML = "";
+
   chipValues.forEach(v=>{
     const el = document.createElement("div");
     el.className = "chip" + (v===selectedChip ? " active":"");
@@ -1004,11 +1006,14 @@ function buildChipRack(){
     el.addEventListener("click", ()=>{
       if(!bettingOpen || dealing) return;
       selectedChip = v;
-      [...rack.querySelectorAll(".chip")].forEach(x=>x.classList.toggle("active", x.dataset.value==String(v)));
+      [...rack.querySelectorAll(".chip")].forEach(x=>
+        x.classList.toggle("active", x.dataset.value===String(v))
+      );
       sfx("chip");
+    });
 
     rack.appendChild(el);
-
+  });
 }
 buildChipRack();
 
@@ -1510,15 +1515,21 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.replace("https://acevaca.github.io/login-site/");
+    return;
   }
 
-document.getElementById("btnLogout")?.addEventListener("click", async ()=>{
-  try{
-    await signOut(auth);
-  }finally{
-    window.location.replace("https://acevaca.github.io/login-site/");
+  const btn = document.getElementById("btnLogout");
+  if(btn){
+    btn.addEventListener("click", async () => {
+      try{
+        await signOut(auth);
+      }finally{
+        window.location.replace("https://acevaca.github.io/login-site/");
+      }
+    });
   }
-
+});
 </script>
+
 </body>
 </html>
