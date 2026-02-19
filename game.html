@@ -144,7 +144,7 @@
     left:50%;
     bottom: calc(var(--chipbarH) + 12px);
     transform: translateX(-50%);
-    width: min(980px, calc(100% - 48px));
+    width: min(860px, calc(100% - 60px));
     height: 210px;
     pointer-events:none;
     z-index: 10;
@@ -156,7 +156,7 @@
       radial-gradient(900px 380px at 50% 20%, rgba(255,255,255,.18), transparent 60%),
       radial-gradient(800px 320px at 50% 120%, rgba(0,0,0,.28), transparent 55%),
       linear-gradient(180deg, rgba(40,8,8,.98), rgba(75,10,10,.96));
-    border: 1px solid rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.25);
     box-shadow: 0 22px 80px rgba(0,0,0,.46);
     overflow:hidden;
   }
@@ -189,24 +189,22 @@
     display:grid;
     grid-template-columns: 1.2fr .9fr 1.2fr;
     border: 1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.28);
+    background: linear-gradient(180deg,#5b0f14,#2a0507);
   }
   .seg{
-    position:relative;
-    padding: 12px 14px;
-    cursor:pointer;
-    user-select:none;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-  }
+  padding: 18px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:6px;
+}
   .seg:active{ transform: translateY(1px); }
   .seg.p{
     background: radial-gradient(320px 220px at 28% 35%, rgba(255,255,255,.18), transparent 62%),
                 linear-gradient(180deg, rgba(47,108,255,.46), rgba(47,108,255,.18));
   }
   .seg.t{
-    background: radial-gradient(320px 220px at 50% 35%, rgba(255,255,255,.16), transparent 62%),
+    background: radial-gradient(320px 220px at 50% 35%, rgba(255,255,255,.25), transparent 62%),
                 linear-gradient(180deg, rgba(24,167,111,.52), rgba(24,167,111,.18));
     align-items:center;
     text-align:center;
@@ -228,7 +226,7 @@
     left:50%;
     bottom: calc(var(--chipbarH) + 120px);
     transform: translateX(-50%);
-    width: min(980px, calc(100% - 48px));
+    width: min(860px, calc(100% - 60px));
     display:flex;
     justify-content:space-between;
     gap: 12px;
@@ -281,8 +279,8 @@
     gap: 12px;
     padding: 10px 14px;
     border-radius: 999px;
-    background: rgba(60,10,10,1);
-    border: 1px solid rgba(255,255,255,.16);
+    background: #3b0c0c;
+    border: 1px solid rgba(255,255,255,.25);
     box-shadow: 0 18px 60px rgba(0,0,0,.45);
   }
   .chipRow{ display:flex; align-items:center; gap: 10px; flex-wrap:wrap; justify-content:center; }
@@ -328,7 +326,7 @@
     cursor:pointer;
     color: var(--white);
     background: rgba(255,255,255,.10);
-    border: 1px solid rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.25);
     user-select:none;
     white-space:nowrap;
   }
@@ -346,16 +344,15 @@
   .bigRoadWrap{
     position:absolute;
     right: var(--safeX);
-    bottom: var(--safeBottom);
-    width: min(46vw, 560px);
-    height: 148px;
-    border-radius: 14px;
-    background: rgba(255,255,255,.96);
-    border: 1px solid rgba(0,0,0,.12);
-    box-shadow: 0 18px 55px rgba(0,0,0,.30);
+    bottom: calc(var(--chipbarH) + 6px);
+    width: 420px;
+    height: 120px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,.15);
+    box-shadow: 0 12px 30px rgba(0,0,0,.25);
     overflow:hidden;
-    pointer-events:auto;
-    z-index: 72;
+    z-index: 60;
   }
   .roadTitle{ position:absolute; top:7px; left:10px; font-size:11px; font-weight: 950; color: rgba(0,0,0,.55); letter-spacing:.04em; }
   .grid{ position:absolute; inset: 24px 9px 9px 9px; display:grid; grid-template-columns: repeat(27, 1fr); grid-template-rows: repeat(6, 1fr);}
@@ -394,7 +391,7 @@
     opacity:0;
     pointer-events:none;
     transition: opacity .18s ease, transform .18s ease;
-    border: 1px solid rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.25);
     box-shadow: 0 26px 90px rgba(0,0,0,.55);
     z-index: 90;
   }
@@ -538,6 +535,9 @@
   .dealer.winAnim{ animation: dealerBreath 3.6s ease-in-out infinite, dealerNod 0.55s ease-out 1; }
 
 </style>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="stage">
@@ -664,7 +664,7 @@
           </div>
           <div class="segTop">
             <div class="segAmt" id="betP">₩0</div>
-            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><span style="opacity:.85;">P PAIR</span><span id="betPP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span></div>
+            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><span style="opacity:.85;">P PAIR</span><span id="betPP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span></div>
           </div>
 
           <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
@@ -686,7 +686,7 @@
 
         <div class="seg b" data-zone="B">
           <div class="segTop">
-            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-start;"><span id="betBP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span><span style="opacity:.85;">B PAIR</span></div>
+            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-start;"><span id="betBP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span><span style="opacity:.85;">B PAIR</span></div>
             <div class="segName">BANKER</div>
           </div>
           <div class="segTop">
@@ -750,7 +750,7 @@
     flex-direction:column;
     gap: 6px;
     background: rgba(0,0,0,.68);
-    border: 1px solid rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.25);
     box-shadow: 0 24px 90px rgba(0,0,0,.55);
     z-index: 95;
     pointer-events:none;
@@ -762,6 +762,16 @@
 
 
 </div>
+
+  <div id="sidePairLeft" style="position:absolute; left:40px; bottom: calc(var(--chipbarH) + 140px); width:140px; padding:16px; border-radius:14px; background:#1c1c1c; border:1px solid rgba(255,255,255,.1); text-align:center;">
+    <div style="font-weight:900; letter-spacing:.1em;">PLAYER PAIR</div>
+    <div style="margin-top:6px; font-size:13px; opacity:.7;">11:1</div>
+  </div>
+  <div id="sidePairRight" style="position:absolute; right:40px; bottom: calc(var(--chipbarH) + 140px); width:140px; padding:16px; border-radius:14px; background:#1c1c1c; border:1px solid rgba(255,255,255,.1); text-align:center;">
+    <div style="font-weight:900; letter-spacing:.1em;">BANKER PAIR</div>
+    <div style="margin-top:6px; font-size:13px; opacity:.7;">11:1</div>
+  </div>
+
 </div>
 
 <script>
@@ -853,7 +863,7 @@
   }
 
   // ===== 잔액 =====
-  let balance = 1000000;
+  let balance = 100000;
   let lastWin = 0;
   function syncStats(){
     $("#uiBalance").textContent = fmt(balance);
