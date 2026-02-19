@@ -1309,18 +1309,21 @@ function startBettingPhase(){
  * - 라운드 끝나면 카드 치움 + 다음 라운드 베팅 시작
  * =========== */
 async function revealOnClick(cardEl){
-  return new Promise(resolve=>{
+  return new Promise(function(resolve){
     cardEl.classList.add("clickable");
-    const onClick = ()=>{
+
+    function onClick(){
       cardEl.classList.remove("clickable");
       cardEl.removeEventListener("click", onClick);
       cardEl.classList.add("revealed");
       sfx("flip");
       resolve();
-    };
+    }
+
     cardEl.addEventListener("click", onClick);
   });
 }
+
 
 async function dealRound(){
   if(dealing) return;
@@ -1524,3 +1527,4 @@ onAuthStateChanged(auth, (user) => {
 
 </body>
 </html>
+
