@@ -3,85 +3,948 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ACE 바카라 - Evolution 2D 스타일</title>
+<title>ACE 바카라 - Evolution 2D</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#8a6d58;color:#fff;overflow:hidden}
-.table{position:absolute;inset:0;background:linear-gradient(#8a6d58,#7b5f4d)}
-.center{position:absolute;top:25%;left:0;right:0;display:flex;justify-content:center;gap:200px}
-.title{font-size:60px;font-weight:900;opacity:.8;font-family:serif}
-.cards{position:absolute;top:40%;left:0;right:0;display:flex;justify-content:center;gap:220px}
-.hand{display:flex;gap:12px}
-.card{width:60px;height:85px;background:#fff;border-radius:8px;color:#000;
-display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
-.bottom{position:absolute;bottom:0;left:0;right:0;background:#111;padding:15px;display:flex;justify-content:center;gap:20px}
-.zone{padding:15px 25px;border-radius:20px;font-weight:900;cursor:pointer}
-.player{background:#2f6cff}
-.tie{background:#0f8f62}
-.banker{background:#e04848}
+  :root{
+    /* 배경 */
+    --bg:#0b0c10;
+
+    /* Evolution 느낌의 테이블 천 (따뜻한 갈색) */
+    --felt:#8a6d58;
+    --felt2:#7b5f4d;
+
+    /* HUD/패널 */
+    --glass: rgba(0,0,0,.28);
+    --line: rgba(255,255,255,.12);
+    --line2: rgba(255,255,255,.18);
+
+    --white:#f7f3ea;
+    --muted: rgba(247,243,234,.72);
+
+    /* 베팅 존 색 */
+    --p:#2f6cff;
+    --t:#0f8f62;
+    --b:#e04848;
+    --gold:#d6b25e;
+
+    --shadow: 0 22px 80px rgba(0,0,0,.55);
+    --chipShadow: 0 10px 22px rgba(0,0,0,.35);
+
+    --cardW: 66px;
+    --cardH: 92px;
+
+    /* 로드맵 */
+    --roadBG: rgba(255,255,255,.88);
+    --roadLine: rgba(0,0,0,.10);
+    --roadText: rgba(0,0,0,.55);
+
+    --cols: 27;
+    --rows: 6;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial;
+    color: var(--white);
+    background:
+      radial-gradient(1200px 700px at 50% 35%, rgba(255,255,255,.06), transparent 60%),
+      radial-gradient(900px 520px at 50% 80%, rgba(214,178,94,.10), transparent 60%),
+      linear-gradient(180deg, #07080b, var(--bg));
+    overflow:hidden;
+  }
+
+  /* ====== STAGE ====== */
+  .stage{position:relative;width:100%;height:100%}
+  .table{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(1200px 700px at 50% 25%, rgba(255,255,255,.08), transparent 60%),
+      radial-gradient(1100px 650px at 50% 50%, rgba(0,0,0,.12), transparent 65%),
+      linear-gradient(180deg, var(--felt), var(--felt2));
+  }
+
+  /* ====== TOP HUD ====== */
+  .topHud{
+    position:absolute; left:18px; right:18px; top:14px;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    pointer-events:none;
+  }
+  .glassPill{
+    pointer-events:auto;
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .btnSmall{
+    appearance:none; border:0;
+    color:var(--white);
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 10px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .btnSmall:active{transform:translateY(1px)}
+
+  .hudRight{
+    pointer-events:auto;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+  }
+  .hudPill{
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .hudPill .k{font-size:12px;color:var(--muted);font-weight:900;letter-spacing:.02em}
+  .hudPill .v{font-size:13px;font-weight:950}
+  .iconRow{
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .ico{
+    width:34px;height:34px;border-radius:999px;
+    display:grid;place-items:center;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--line);
+    cursor:pointer; user-select:none;
+  }
+  .ico:active{transform:translateY(1px)}
+  .ico svg{opacity:.9}
+
+  /* ====== CENTER HEADINGS ====== */
+  .heads{
+    position:absolute; left:0; right:0; top: 126px;
+    display:flex; justify-content:center; gap: min(360px, 26vw);
+    pointer-events:none;
+  }
+  .headWord{
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    letter-spacing: .12em;
+    font-weight: 900;
+    font-size: clamp(42px, 5vw, 64px);
+    color: rgba(255,255,255,.75);
+    text-shadow: 0 2px 0 rgba(0,0,0,.12);
+  }
+
+  /* ====== CARDS AREA ====== */
+  .cardsArea{
+    position:absolute; left:0; right:0; top: 230px;
+    display:flex; justify-content:center; gap: min(300px, 22vw);
+    pointer-events:none;
+  }
+  .hand{
+    width: min(380px, 42vw);
+    height: 200px;
+    display:flex; flex-direction:column; align-items:center; gap: 12px;
+  }
+  .handRow{
+    display:flex; gap: 14px;
+    align-items:center; justify-content:center;
+    min-height: calc(var(--cardH) + 6px);
+  }
+  .handScore{
+    display:flex; align-items:baseline; gap: 10px;
+    font-weight: 950; opacity:.95;
+  }
+  .handScore .label{font-size:13px;color:var(--muted);letter-spacing:.04em}
+  .handScore .num{font-size:28px}
+
+  /* Card (PNG 없이 HTML로) */
+  .card{
+    width: var(--cardW);
+    height: var(--cardH);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff, #f1f1f1);
+    border: 1px solid rgba(0,0,0,.18);
+    box-shadow: 0 12px 22px rgba(0,0,0,.25);
+    position:relative;
+    overflow:hidden;
+    display:grid;
+    grid-template-rows: 1fr 1fr;
+    padding: 8px 8px 6px;
+    transform: translateY(-8px) scale(.98);
+    opacity:0;
+    will-change: transform, opacity;
+  }
+  .card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(140px 80px at 30% 20%, rgba(0,0,0,.06), transparent 60%);
+    pointer-events:none;
+  }
+  .corner{
+    position:relative; z-index:1;
+    display:flex; flex-direction:column; align-items:flex-start;
+    gap:2px;
+    font-weight: 950;
+    letter-spacing: .02em;
+    line-height:1;
+  }
+  .corner.bot{
+    align-items:flex-end;
+    transform: rotate(180deg);
+    justify-self:end;
+    align-self:end;
+  }
+  .rank{font-size:18px}
+  .suit{font-size:16px}
+  .pip{
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    font-size: 32px;
+    opacity:.22;
+    transform: rotate(-12deg);
+  }
+  .red{color:#d83434}
+  .black{color:#111}
+
+  /* ====== ROADS ====== */
+  .roads{
+    position:absolute;
+    left: 18px; right: 18px;
+    bottom: 118px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap: 12px;
+    pointer-events:none;
+  }
+  .roadBox{
+    pointer-events:auto;
+    width: min(44vw, 520px);
+    height: 148px;
+    border-radius: 16px;
+    background: var(--roadBG);
+    border: 1px solid rgba(0,0,0,.12);
+    box-shadow: 0 18px 55px rgba(0,0,0,.35);
+    overflow:hidden;
+    position:relative;
+  }
+  .roadBox.small{ width: min(40vw, 460px); height: 132px; }
+  .roadTitle{
+    position:absolute;
+    top:8px; left:12px;
+    font-size:12px;
+    font-weight: 950;
+    color: var(--roadText);
+    letter-spacing:.04em;
+  }
+  .grid{
+    position:absolute;
+    inset: 26px 10px 10px 10px;
+    display:grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+  }
+  .cell{
+    border-right: 1px solid var(--roadLine);
+    border-bottom: 1px solid var(--roadLine);
+    position:relative;
+  }
+  .cell:nth-child(calc(var(--cols) * 1n)){ /* keep */
+  }
+  .dot{
+    width: 14px; height: 14px;
+    border-radius: 999px;
+    position:absolute; left:50%; top:50%;
+    transform: translate(-50%,-50%);
+    border: 2px solid rgba(0,0,0,.12);
+  }
+  .dot.p{ background: var(--p); }
+  .dot.b{ background: var(--b); }
+  .dot.t{ background: #2c2c2c; border-color: rgba(0,0,0,.25); }
+
+  .dot.big{
+    width: 18px; height: 18px;
+    background: transparent;
+    border: 2px solid rgba(0,0,0,.14);
+  }
+  .dot.big.p{ border-color: var(--p); }
+  .dot.big.b{ border-color: var(--b); }
+  .tieMark{
+    position:absolute;
+    right:-2px; bottom:-2px;
+    width: 8px; height: 8px;
+    border-radius: 999px;
+    background: #2c2c2c;
+    border: 2px solid rgba(255,255,255,.85);
+  }
+
+  /* ====== BOTTOM BET PANEL ====== */
+  .bottom{
+    position:absolute; left:0; right:0; bottom:0;
+    padding: 14px 18px 18px;
+    display:flex; justify-content:center;
+    pointer-events:none;
+  }
+  .betPanel{
+    pointer-events:auto;
+    width: min(980px, calc(100% - 20px));
+    border-radius: 26px;
+    background: linear-gradient(180deg, rgba(14,16,20,.92), rgba(10,12,16,.92));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 12px 14px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+
+  .zoneWrap{
+    flex: 1;
+    display:grid;
+    grid-template-columns: 1.2fr .8fr 1.2fr;
+    gap: 10px;
+  }
+  .zone{
+    border-radius: 22px;
+    min-height: 76px;
+    padding: 10px 12px;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    user-select:none;
+    border: 1px solid var(--line);
+  }
+  .zone:active{transform: translateY(1px)}
+  .zone.player{
+    background: radial-gradient(240px 140px at 30% 30%, rgba(255,255,255,.18), transparent 60%),
+                linear-gradient(180deg, rgba(47,108,255,.35), rgba(47,108,255,.18));
+  }
+  .zone.tie{
+    background: radial-gradient(240px 140px at 50% 30%, rgba(255,255,255,.16), transparent 60%),
+                linear-gradient(180deg, rgba(15,143,98,.38), rgba(15,143,98,.18));
+  }
+  .zone.banker{
+    background: radial-gradient(240px 140px at 70% 30%, rgba(255,255,255,.18), transparent 60%),
+                linear-gradient(180deg, rgba(224,72,72,.35), rgba(224,72,72,.18));
+  }
+  .zoneTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .zoneName{font-weight: 950;letter-spacing:.02em;font-size: 15px}
+  .zoneOdds{font-size:12px;font-weight: 950;color: rgba(255,255,255,.78)}
+  .zoneBet{margin-top: 10px;display:flex;align-items:center;justify-content:space-between}
+  .zoneBet .amt{font-weight: 950;font-size: 16px}
+  .zoneBet .hint{font-size:12px;color: rgba(255,255,255,.72);font-weight: 900}
+
+  .chips{display:flex;align-items:center;gap:10px;padding-left: 4px}
+  .chip{
+    width: 48px; height: 48px;
+    border-radius: 999px;
+    display:grid; place-items:center;
+    font-weight: 1000;
+    letter-spacing:.02em;
+    cursor:pointer;
+    user-select:none;
+    box-shadow: var(--chipShadow);
+    border: 2px solid rgba(255,255,255,.28);
+    background:
+      radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.22), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.06));
+  }
+  .chip[data-v="1000"]{ outline: 2px solid rgba(47,108,255,.55); }
+  .chip[data-v="5000"]{ outline: 2px solid rgba(15,143,98,.55); }
+  .chip[data-v="10000"]{ outline: 2px solid rgba(224,72,72,.55); }
+  .chip[data-v="50000"]{ outline: 2px solid rgba(214,178,94,.55); }
+  .chip.active{
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,.55);
+    filter: brightness(1.06);
+  }
+  .chip:active{transform: translateY(-1px)}
+
+  .actions{display:flex;align-items:center;gap:8px}
+  .actBtn{
+    appearance:none;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 12px;
+    font-weight: 1000;
+    cursor:pointer;
+    color: var(--white);
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--line);
+    user-select:none;
+    white-space:nowrap;
+  }
+  .actBtn:active{transform:translateY(1px)}
+  .actBtn.primary{
+    background: linear-gradient(180deg, rgba(214,178,94,.38), rgba(214,178,94,.18));
+    border-color: rgba(214,178,94,.55);
+  }
+  .actBtn.danger{
+    background: linear-gradient(180deg, rgba(255,90,106,.35), rgba(255,90,106,.18));
+    border-color: rgba(255,90,106,.5);
+  }
+
+  /* ====== TOAST ====== */
+  .toast{
+    position:absolute;
+    left:50%;
+    top: 88px;
+    transform: translateX(-50%);
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.38);
+    border: 1px solid var(--line2);
+    backdrop-filter: blur(8px);
+    font-weight: 950;
+    letter-spacing:.02em;
+    opacity:0;
+    transition: opacity .18s ease, transform .18s ease;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1; transform: translateX(-50%) translateY(0)}
+  .toast.hide{opacity:0; transform: translateX(-50%) translateY(-6px)}
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 980px){
+    .roads{display:none;} /* 모바일은 로드맵 숨김 (원하면 켜줄 수 있음) */
+    .cardsArea{gap: 12vw;}
+    .betPanel{flex-direction:column; align-items:stretch}
+    .chips{justify-content:center}
+    .actions{justify-content:center}
+  }
+
+  .mono{font-variant-numeric: tabular-nums}
 </style>
 </head>
+
 <body>
-<div class="table"></div>
+<div class="stage">
+  <div class="table"></div>
 
-<div class="center">
-  <div class="title">PLAYER</div>
-  <div class="title">BANKER</div>
-</div>
+  <div class="topHud">
+    <div class="glassPill">
+      <button class="btnSmall" id="btnChat">클릭하여 채팅하기</button>
+      <button class="btnSmall" id="btnNewShoe">새 슈(덱)</button>
+    </div>
 
-<div class="cards">
-  <div class="hand" id="player"></div>
-  <div class="hand" id="banker"></div>
-</div>
+    <div class="hudRight">
+      <div class="hudPill">
+        <div class="k">잔고</div>
+        <div class="v mono" id="balance">₩1,000,000</div>
+      </div>
+      <div class="hudPill">
+        <div class="k">최근결과</div>
+        <div class="v mono" id="lastResult">-</div>
+      </div>
+      <div class="iconRow" aria-label="우측 아이콘">
+        <div class="ico" title="사운드(더미)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M11 5L6 9H3v6h3l5 4V5z" stroke="white" stroke-width="2" opacity=".9"/>
+            <path d="M15.5 8.5a4 4 0 010 7" stroke="white" stroke-width="2" opacity=".55"/>
+            <path d="M17.8 6.2a7 7 0 010 11.6" stroke="white" stroke-width="2" opacity=".35"/>
+          </svg>
+        </div>
+        <div class="ico" title="설정(더미)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" stroke="white" stroke-width="2" opacity=".9"/>
+            <path d="M19.4 15a7.9 7.9 0 000-6l2-1.2-2-3.4-2.3 1a8.2 8.2 0 00-5.2-3L11.5 0h-3L8 2.4a8.2 8.2 0 00-5.1 3l-2.3-1-2 3.4L.6 9a7.9 7.9 0 000 6L0 16.2l2 3.4 2.3-1a8.2 8.2 0 005.1 3L8.5 24h3l.4-2.4a8.2 8.2 0 005.2-3l2.3 1 2-3.4L19.4 15z" stroke="white" stroke-width="2" opacity=".4"/>
+          </svg>
+        </div>
+        <div class="ico" title="전체화면" id="btnFS">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" stroke="white" stroke-width="2" opacity=".85"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="bottom">
-  <div class="zone player" onclick="bet('P')">플레이어</div>
-  <div class="zone tie" onclick="bet('T')">무</div>
-  <div class="zone banker" onclick="bet('B')">뱅커</div>
-  <div class="zone" style="background:#444" onclick="deal()">딜</div>
+  <div class="toast" id="toast">-</div>
+
+  <div class="heads">
+    <div class="headWord">PLAYER</div>
+    <div class="headWord">BANKER</div>
+  </div>
+
+  <div class="cardsArea">
+    <div class="hand">
+      <div class="handRow" id="playerCards"></div>
+      <div class="handScore">
+        <div class="label">플레이어 합</div>
+        <div class="num mono" id="playerSum">0</div>
+      </div>
+    </div>
+
+    <div class="hand">
+      <div class="handRow" id="bankerCards"></div>
+      <div class="handScore">
+        <div class="label">뱅커 합</div>
+        <div class="num mono" id="bankerSum">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="roads">
+    <div class="roadBox small">
+      <div class="roadTitle">BEAD ROAD</div>
+      <div class="grid" id="beadGrid"></div>
+    </div>
+    <div class="roadBox">
+      <div class="roadTitle">BIG ROAD</div>
+      <div class="grid" id="bigGrid"></div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="betPanel">
+      <div class="zoneWrap">
+        <div class="zone player" data-zone="P">
+          <div class="zoneTop">
+            <div class="zoneName">플레이어</div>
+            <div class="zoneOdds">1 : 1</div>
+          </div>
+          <div class="zoneBet">
+            <div class="amt mono" id="betP">₩0</div>
+            <div class="hint">클릭하여 베팅</div>
+          </div>
+        </div>
+
+        <div class="zone tie" data-zone="T">
+          <div class="zoneTop">
+            <div class="zoneName">무</div>
+            <div class="zoneOdds">8 : 1</div>
+          </div>
+          <div class="zoneBet">
+            <div class="amt mono" id="betT">₩0</div>
+            <div class="hint">클릭하여 베팅</div>
+          </div>
+        </div>
+
+        <div class="zone banker" data-zone="B">
+          <div class="zoneTop">
+            <div class="zoneName">뱅커</div>
+            <div class="zoneOdds">1 : 1 (5% 수수료)</div>
+          </div>
+          <div class="zoneBet">
+            <div class="amt mono" id="betB">₩0</div>
+            <div class="hint">클릭하여 베팅</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chips" id="chips">
+        <div class="chip active mono" data-v="1000">1K</div>
+        <div class="chip mono" data-v="5000">5K</div>
+        <div class="chip mono" data-v="10000">10K</div>
+        <div class="chip mono" data-v="50000">50K</div>
+      </div>
+
+      <div class="actions">
+        <button class="actBtn" id="btnUndo">되돌리기</button>
+        <button class="actBtn danger" id="btnClear">초기화</button>
+        <button class="actBtn primary" id="btnDeal">딜</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-let shoe=[];
-const suits=["♦","♥","♣","♠"];
-const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-function newShoe(){
-  shoe=[];
-  for(let d=0;d<6;d++){
-    for(let s of suits){
-      for(let r of ranks){
-        shoe.push(r+s);
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+  const fmt = (n) => "₩" + Math.round(n).toLocaleString("ko-KR");
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  const toastEl = $("#toast");
+  let toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.remove("hide");
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastEl.classList.remove("show");
+      toastEl.classList.add("hide");
+    }, 1400);
+  }
+
+  // ====== Deck/Shoe ======
+  const SUITS = [
+    {k:"♦", c:"red"}, {k:"♥", c:"red"},
+    {k:"♣", c:"black"}, {k:"♠", c:"black"}
+  ];
+  const RANKS = [
+    {r:"A", v:1},{r:"2", v:2},{r:"3", v:3},{r:"4", v:4},{r:"5", v:5},
+    {r:"6", v:6},{r:"7", v:7},{r:"8", v:8},{r:"9", v:9},
+    {r:"10", v:0},{r:"J", v:0},{r:"Q", v:0},{r:"K", v:0},
+  ];
+
+  function newShoe(decks=8){
+    const shoe = [];
+    for(let d=0; d<decks; d++){
+      for(const s of SUITS){
+        for(const rk of RANKS){
+          shoe.push({rank: rk.r, suit: s.k, color: s.c, val: rk.v});
+        }
+      }
+    }
+    for(let i=shoe.length-1;i>0;i--){
+      const j = (Math.random()*(i+1))|0;
+      [shoe[i], shoe[j]] = [shoe[j], shoe[i]];
+    }
+    return shoe;
+  }
+
+  let shoe = newShoe(8);
+  function draw(){
+    if(shoe.length < 20){
+      shoe = newShoe(8);
+      toast("새 슈를 섞었습니다");
+    }
+    return shoe.pop();
+  }
+
+  function sumHand(hand){
+    return hand.reduce((a,c)=>a+c.val,0) % 10;
+  }
+
+  // ====== Third card rules (표준 룰) ======
+  function shouldPlayerDraw(pTotal){ return pTotal <= 5; }
+  function shouldBankerDraw(bTotal, pThirdValOrNull){
+    if(pThirdValOrNull === null) return bTotal <= 5;
+    const p3 = pThirdValOrNull;
+    if(bTotal <= 2) return true;
+    if(bTotal === 3) return p3 !== 8;
+    if(bTotal === 4) return (p3 >= 2 && p3 <= 7);
+    if(bTotal === 5) return (p3 >= 4 && p3 <= 7);
+    if(bTotal === 6) return (p3 === 6 || p3 === 7);
+    return false;
+  }
+
+  // ====== UI refs ======
+  const elBalance = $("#balance");
+  const elLast = $("#lastResult");
+  const elPlayerCards = $("#playerCards");
+  const elBankerCards = $("#bankerCards");
+  const elPSum = $("#playerSum");
+  const elBSum = $("#bankerSum");
+
+  const elBetP = $("#betP");
+  const elBetB = $("#betB");
+  const elBetT = $("#betT");
+
+  // Roads
+  const beadGrid = $("#beadGrid");
+  const bigGrid  = $("#bigGrid");
+
+  const COLS = 27, ROWS = 6;
+
+  function buildGrid(root){
+    root.innerHTML = "";
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        const d = document.createElement("div");
+        d.className = "cell";
+        d.dataset.r = r;
+        d.dataset.c = c;
+        // last col has no border-right (cosmetic)
+        if(c === COLS-1) d.style.borderRight = "0";
+        if(r === ROWS-1) d.style.borderBottom = "0";
+        root.appendChild(d);
       }
     }
   }
-  shoe.sort(()=>Math.random()-0.5);
-}
-newShoe();
+  buildGrid(beadGrid);
+  buildGrid(bigGrid);
 
-function draw(){
-  if(shoe.length<10)newShoe();
-  return shoe.pop();
-}
+  // ====== Betting state ======
+  let balance = 1000000;
+  let chipValue = 1000;
 
-function deal(){
-  document.getElementById("player").innerHTML="";
-  document.getElementById("banker").innerHTML="";
-  let p1=draw(),p2=draw(),b1=draw(),b2=draw();
-  addCard("player",p1);
-  addCard("player",p2);
-  addCard("banker",b1);
-  addCard("banker",b2);
-}
+  let bet = {P:0, B:0, T:0};
+  let betStack = []; // undo
 
-function addCard(id,txt){
-  let c=document.createElement("div");
-  c.className="card";
-  c.textContent=txt;
-  document.getElementById(id).appendChild(c);
-}
+  function syncMoney(){
+    elBalance.textContent = fmt(balance);
+    elBetP.textContent = fmt(bet.P);
+    elBetB.textContent = fmt(bet.B);
+    elBetT.textContent = fmt(bet.T);
+  }
+  syncMoney();
 
-function bet(x){
-  alert(x+" 베팅");
-}
+  function placeBet(zone){
+    if(chipValue <= 0) return;
+    if(balance < chipValue){ toast("잔고가 부족합니다"); return; }
+    balance -= chipValue;
+    bet[zone] += chipValue;
+    betStack.push({zone, amt: chipValue});
+    syncMoney();
+  }
+
+  $("#chips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    $$(".chip").forEach(x => x.classList.remove("active"));
+    chip.classList.add("active");
+    chipValue = parseInt(chip.dataset.v,10);
+  });
+
+  $$(".zone").forEach(z => {
+    z.addEventListener("click", () => placeBet(z.dataset.zone));
+  });
+
+  $("#btnUndo").addEventListener("click", () => {
+    const last = betStack.pop();
+    if(!last){ toast("되돌릴 것이 없습니다"); return; }
+    bet[last.zone] -= last.amt;
+    balance += last.amt;
+    syncMoney();
+  });
+
+  $("#btnClear").addEventListener("click", () => {
+    balance += bet.P + bet.B + bet.T;
+    bet = {P:0,B:0,T:0};
+    betStack = [];
+    syncMoney();
+    toast("베팅 초기화");
+  });
+
+  $("#btnNewShoe").addEventListener("click", () => {
+    shoe = newShoe(8);
+    toast("새 슈(덱) 준비 완료");
+  });
+
+  // Fullscreen
+  $("#btnFS").addEventListener("click", async () => {
+    try{
+      if(!document.fullscreenElement) await document.documentElement.requestFullscreen();
+      else await document.exitFullscreen();
+    }catch(_){}
+  });
+
+  // ====== Cards rendering (HTML) ======
+  function cardEl(card){
+    const el = document.createElement("div");
+    el.className = "card";
+    const top = document.createElement("div");
+    top.className = "corner " + (card.color === "red" ? "red":"black");
+    top.innerHTML = "<div class='rank'>"+card.rank+"</div><div class='suit'>"+card.suit+"</div>";
+
+    const bot = document.createElement("div");
+    bot.className = "corner bot " + (card.color === "red" ? "red":"black");
+    bot.innerHTML = "<div class='rank'>"+card.rank+"</div><div class='suit'>"+card.suit+"</div>";
+
+    const pip = document.createElement("div");
+    pip.className = "pip " + (card.color === "red" ? "red":"black");
+    pip.textContent = card.suit;
+
+    el.appendChild(top);
+    el.appendChild(bot);
+    el.appendChild(pip);
+    return el;
+  }
+
+  function clearHands(){
+    elPlayerCards.innerHTML = "";
+    elBankerCards.innerHTML = "";
+    elPSum.textContent = "0";
+    elBSum.textContent = "0";
+  }
+
+  async function dealAnim(container, card){
+    const el = cardEl(card);
+    container.appendChild(el);
+    await sleep(18);
+    el.style.transition = "transform .18s ease, opacity .18s ease";
+    el.style.transform = "translateY(0) scale(1)";
+    el.style.opacity = "1";
+    await sleep(190);
+    el.style.transition = "";
+  }
+
+  // ====== Roads data ======
+  const bead = []; // P/B/T
+  const bigState = {
+    col: 0, row: 0, last: null,
+    map: new Map()
+  };
+  function key(c,r){ return c + "," + r; }
+
+  function beadPush(res){
+    bead.push(res);
+    if(bead.length > COLS*ROWS) bead.shift();
+  }
+
+  function setBigCell(c,r,res){
+    const k = key(c,r);
+    const prev = bigState.map.get(k);
+    bigState.map.set(k, {res, ties: prev?.ties || 0});
+  }
+  function addTie(c,r){
+    const k = key(c,r);
+    const cur = bigState.map.get(k);
+    if(!cur) return;
+    bigState.map.set(k, {res: cur.res, ties: (cur.ties||0)+1});
+  }
+
+  function bigPush(res){
+    if(res === "T"){
+      if(bigState.last !== null) addTie(bigState.col, bigState.row);
+      return;
+    }
+
+    if(bigState.last === null){
+      bigState.col = 0; bigState.row = 0; bigState.last = res;
+      setBigCell(bigState.col, bigState.row, res);
+      return;
+    }
+
+    if(res === bigState.last){
+      let nextR = bigState.row + 1;
+      let nextC = bigState.col;
+
+      // 아래로 못 가면 오른쪽으로 "끌림"
+      if(nextR >= ROWS || bigState.map.has(key(nextC, nextR))){
+        nextR = bigState.row;
+        nextC = Math.min(bigState.col + 1, COLS-1);
+        while(bigState.map.has(key(nextC, nextR)) && nextC < COLS-1) nextC++;
+      }
+      bigState.col = nextC;
+      bigState.row = nextR;
+      setBigCell(bigState.col, bigState.row, res);
+    }else{
+      // 새 컬럼 시작
+      bigState.col = Math.min(bigState.col + 1, COLS-1);
+      bigState.row = 0;
+      bigState.last = res;
+      while(bigState.map.has(key(bigState.col, bigState.row)) && bigState.col < COLS-1) bigState.col++;
+      setBigCell(bigState.col, bigState.row, res);
+    }
+  }
+
+  function renderBead(){
+    beadGrid.querySelectorAll(".dot").forEach(d => d.remove());
+    for(let i=0;i<bead.length;i++){
+      const c = i % COLS;
+      const r = Math.floor(i / COLS);
+      if(r >= ROWS) continue;
+      const cell = beadGrid.querySelector(".cell[data-r='"+r+"'][data-c='"+c+"']");
+      if(!cell) continue;
+      const dot = document.createElement("div");
+      dot.className = "dot " + (bead[i]==="P"?"p": bead[i]==="B"?"b":"t");
+      cell.appendChild(dot);
+    }
+  }
+
+  function renderBig(){
+    bigGrid.querySelectorAll(".dot").forEach(d => d.remove());
+    for(const [k,v] of bigState.map.entries()){
+      const [c,r] = k.split(",").map(Number);
+      const cell = bigGrid.querySelector(".cell[data-r='"+r+"'][data-c='"+c+"']");
+      if(!cell) continue;
+
+      const dot = document.createElement("div");
+      dot.className = "dot big " + (v.res==="P"?"p":"b");
+      cell.appendChild(dot);
+
+      if(v.ties){
+        const tm = document.createElement("div");
+        tm.className = "tieMark";
+        dot.appendChild(tm);
+      }
+    }
+  }
+
+  // ====== Game flow ======
+  let inRound = false;
+
+  async function dealRound(){
+    if(inRound) return;
+    inRound = true;
+
+    clearHands();
+
+    const player = [];
+    const banker = [];
+
+    // initial: P B P B
+    player.push(draw()); await dealAnim(elPlayerCards, player[player.length-1]);
+    banker.push(draw()); await dealAnim(elBankerCards, banker[banker.length-1]);
+    player.push(draw()); await dealAnim(elPlayerCards, player[player.length-1]);
+    banker.push(draw()); await dealAnim(elBankerCards, banker[banker.length-1]);
+
+    let pTotal = sumHand(player);
+    let bTotal = sumHand(banker);
+    elPSum.textContent = String(pTotal);
+    elBSum.textContent = String(bTotal);
+
+    const natural = (pTotal >= 8 || bTotal >= 8);
+
+    let pThird = null;
+    if(!natural){
+      if(shouldPlayerDraw(pTotal)){
+        pThird = draw();
+        player.push(pThird);
+        await dealAnim(elPlayerCards, pThird);
+        pTotal = sumHand(player);
+        elPSum.textContent = String(pTotal);
+      }
+      if(shouldBankerDraw(bTotal, pThird ? pThird.val : null)){
+        const bThird = draw();
+        banker.push(bThird);
+        await dealAnim(elBankerCards, bThird);
+        bTotal = sumHand(banker);
+        elBSum.textContent = String(bTotal);
+      }
+    }
+
+    // result
+    let res = "T";
+    if(pTotal > bTotal) res = "P";
+    else if(bTotal > pTotal) res = "B";
+
+    beadPush(res);
+    bigPush(res);
+    renderBead();
+    renderBig();
+
+    const msg = (res==="P"?"플레이어 승": res==="B"?"뱅커 승":"무(타이)");
+    elLast.textContent = msg;
+    toast(msg);
+
+    // payout (베팅이 있을 때만)
+    const totalBet = bet.P + bet.B + bet.T;
+    if(totalBet > 0){
+      let win = 0;
+      if(res === "P"){
+        win += bet.P * 2; // 원금+승리
+      }else if(res === "B"){
+        // 뱅커 5% 커미션: profit=bet, commission=bet*0.05 => return = bet + (bet-commission)=1.95bet
+        win += bet.B * 1.95;
+      }else{
+        win += bet.T * 9; // 원금 + 8배
+      }
+      balance += win;
+      bet = {P:0,B:0,T:0};
+      betStack = [];
+      syncMoney();
+    }
+
+    await sleep(320);
+    inRound = false;
+  }
+
+  $("#btnDeal").addEventListener("click", dealRound);
+
+  renderBead();
+  renderBig();
+})();
 </script>
 </body>
 </html>
