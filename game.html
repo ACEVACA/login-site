@@ -13,8 +13,8 @@
     --b:#e04848;
     --gold:#d6b25e;
 
-    --cardW: 86px;
-    --cardH: 122px;
+    --cardW: 104px;
+    --cardH: 148px;
 
     --safeX: 16px;
     --safeTop: 12px;
@@ -144,7 +144,7 @@
     left:50%;
     bottom: calc(var(--chipbarH) + 12px);
     transform: translateX(-50%);
-    width: min(1060px, calc(100% - 40px));
+    width: min(980px, calc(100% - 48px));
     height: 210px;
     pointer-events:none;
     z-index: 10;
@@ -189,7 +189,7 @@
     display:grid;
     grid-template-columns: 1.2fr .9fr 1.2fr;
     border: 1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.10);
+    background: rgba(0,0,0,.28);
   }
   .seg{
     position:relative;
@@ -218,49 +218,25 @@
     text-align:right;
   }
   .segTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-  .segName{ font-weight: 1100; font-size: 15px; letter-spacing:.02em; }
+  .segName{ font-weight: 1200; font-size: 15px; letter-spacing:.06em; }
   .segOdds{ font-weight: 950; font-size: 12px; color: rgba(255,255,255,.82); }
-  .segAmt{ font-weight: 1100; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .segAmt{ font-weight: 1200; font-size: 20px; font-variant-numeric: tabular-nums; letter-spacing:.02em; }
 
-  .tableCards{
-    position:absolute;
-    left:50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-    display:flex;
-    gap: 26px;
-    align-items:flex-end;
-    pointer-events:none;
-    z-index: 13;
-  }
-  .miniHand{
-    width: 240px;
-    display:flex;
-    justify-content:center;
-    gap: 10px;
-  }
-  .miniLabel{
-    position:absolute;
-    left:50%;
-    transform: translateX(-50%);
-    bottom: 54px;
-    font-weight: 1000;
-    letter-spacing:.06em;
-    font-size: 11px;
-    opacity:.80;
-  }
-  .miniLabel.p{ left: calc(50% - 140px);}
-  .miniLabel.b{ left: calc(50% + 140px);}
-
+          
   .cardsArea{
-    position:absolute; left:0; right:0;
-    top: 164px;
-    display:flex; justify-content:center; gap: min(360px, 22vw);
+    position:absolute;
+    left:50%;
+    bottom: calc(var(--chipbarH) + 120px);
+    transform: translateX(-50%);
+    width: min(980px, calc(100% - 48px));
+    display:flex;
+    justify-content:space-between;
+    gap: 12px;
     pointer-events:none;
-    z-index: 6;
+    z-index: 20;
   }
-  .hand{ width: min(520px, 46vw); height: 270px; display:flex; align-items:center; justify-content:center; }
-  .handRow{ display:flex; gap: 16px; align-items:center; justify-content:center; min-height: calc(var(--cardH) + 8px); }
+  .hand{ width: 48%; height: 220px; display:flex; align-items:flex-end; justify-content:center; }
+  .handRow{ display:flex; gap: 16px; align-items:flex-end; justify-content:center; min-height: calc(var(--cardH) + 8px); }
 
   .cardSlot{
     width: var(--cardW);
@@ -290,16 +266,7 @@
   .cardFace.back{ transform: rotateY(0deg); }
   .cardFace.front{ transform: rotateY(180deg); }
 
-  .miniCard{
-    width: 54px; height: 76px;
-    border-radius: 10px;
-    perspective: 700px;
-    position:relative;
-  }
-  .miniCard .cardInner{ transition: transform .42s ease; }
-  .miniCard.revealed .cardInner{ transform: rotateY(180deg); }
-  .miniCard .cardFace{ border-radius: 10px; box-shadow: 0 10px 18px rgba(0,0,0,.25); }
-
+        
   .bottom{
     position:absolute; left:0; right:0; bottom:0;
     padding: 0 var(--safeX) var(--safeBottom);
@@ -314,7 +281,7 @@
     gap: 12px;
     padding: 10px 14px;
     border-radius: 999px;
-    background: rgba(60,10,10,.98);
+    background: rgba(60,10,10,1);
     border: 1px solid rgba(255,255,255,.16);
     box-shadow: 0 18px 60px rgba(0,0,0,.45);
   }
@@ -375,20 +342,11 @@
     border-color: rgba(255,170,80,.52);
   }
 
-  .extraBtnWrap{
-    position:absolute;
-    left:50%;
-    bottom: calc(var(--chipbarH) + 232px);
-    transform: translateX(-50%);
-    pointer-events:auto;
-    display:none;
-    z-index: 75;
-  }
-
+  
   .bigRoadWrap{
     position:absolute;
     right: var(--safeX);
-    bottom: calc(var(--chipbarH) + 6px);
+    bottom: var(--safeBottom);
     width: min(46vw, 560px);
     height: 148px;
     border-radius: 14px;
@@ -397,7 +355,7 @@
     box-shadow: 0 18px 55px rgba(0,0,0,.30);
     overflow:hidden;
     pointer-events:auto;
-    z-index: 14;
+    z-index: 72;
   }
   .roadTitle{ position:absolute; top:7px; left:10px; font-size:11px; font-weight: 950; color: rgba(0,0,0,.55); letter-spacing:.04em; }
   .grid{ position:absolute; inset: 24px 9px 9px 9px; display:grid; grid-template-columns: repeat(27, 1fr); grid-template-rows: repeat(6, 1fr);}
@@ -408,7 +366,7 @@
   .tieMark{ position:absolute; right:-2px; bottom:-2px; width: 7px; height: 7px; border-radius: 999px; background:#2c2c2c; border: 2px solid rgba(255,255,255,.88);}
 
   .bottomLeft{
-    position:absolute; left: var(--safeX); bottom: calc(var(--chipbarH) + 10px);
+    position:absolute; left: var(--safeX); bottom: 6px;
     display:flex; gap:10px;
     z-index: 70;
     pointer-events:auto;
@@ -436,7 +394,8 @@
     opacity:0;
     pointer-events:none;
     transition: opacity .18s ease, transform .18s ease;
-    box-shadow: 0 22px 70px rgba(0,0,0,.45);
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: 0 26px 90px rgba(0,0,0,.55);
     z-index: 90;
   }
   .winBanner.show{ opacity:1; transform: translateX(-50%) translateY(0); }
@@ -496,6 +455,26 @@
     z-index: 85;
     transform: translate(-50%,-50%);
   }
+
+  
+  .cardSlot.clickable{
+    pointer-events:auto;
+    cursor:pointer;
+    outline: 2px solid rgba(214,178,94,.45);
+    box-shadow: 0 18px 36px rgba(0,0,0,.28);
+  }
+  .cardSlot.clickable::after{
+    content:"CLICK";
+    position:absolute;
+    left:50%; top:-18px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 1100;
+    letter-spacing:.18em;
+    color: rgba(255,222,100,.92);
+    text-shadow: 0 2px 10px rgba(0,0,0,.55);
+  }
+
 
   @media (max-width: 980px){
     .bigRoadWrap{display:none;}
@@ -668,12 +647,7 @@
       <div class="winLine3" id="winLine3">₩0</div>
     </div>
   </div>
-
-  <div class="extraBtnWrap" id="extraBtnWrap">
-    <button class="btn warn" id="btnRevealExtra">엑스트라 카드 공개</button>
-  </div>
-
-  <div class="cardsArea">
+<div class="cardsArea">
     <div class="hand"><div class="handRow" id="playerCards"></div></div>
     <div class="hand"><div class="handRow" id="bankerCards"></div></div>
   </div>
@@ -690,7 +664,11 @@
           </div>
           <div class="segTop">
             <div class="segAmt" id="betP">₩0</div>
-            <div class="segOdds">P PAIR</div>
+            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><span style="opacity:.85;">P PAIR</span><span id="betPP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span></div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
+            <button class="btn" style="padding:7px 10px; font-size:12px;" data-zone="PP">P 페어</button>
           </div>
         </div>
 
@@ -708,20 +686,21 @@
 
         <div class="seg b" data-zone="B">
           <div class="segTop">
-            <div class="segOdds">B PAIR</div>
+            <div class="segOdds" style="display:flex;align-items:center;gap:8px;justify-content:flex-start;"><span id="betBP" style="padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.22);font-weight:1100;">₩0</span><span style="opacity:.85;">B PAIR</span></div>
             <div class="segName">BANKER</div>
           </div>
           <div class="segTop">
             <div class="segOdds">1 : 1 (5%)</div>
             <div class="segAmt" id="betB">₩0</div>
           </div>
+
+          <div style="display:flex;gap:10px;align-items:center;justify-content:flex-start;">
+            <button class="btn" style="padding:7px 10px; font-size:12px;" data-zone="BP">B 페어</button>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="tableCards">
-      <div class="miniLabel p">PLAYER</div>
-      <div class="miniLabel b">BANKER</div>
+<div class="miniLabel b">BANKER</div>
       <div class="miniHand" id="miniPlayer"></div>
       <div class="miniHand" id="miniBanker"></div>
     </div>
@@ -738,7 +717,7 @@
       <div class="statVal" id="uiBalance">₩0</div>
     </div>
     <div class="statPill">
-      <div class="statLabel">이전 결과</div>
+      <div class="statLabel">베팅 결과</div>
       <div class="statVal gold" id="uiLast">₩0</div>
     </div>
   </div>
@@ -758,9 +737,31 @@
       </div>
 
       <button class="btn" id="btnX2">×2</button>
-      <button class="btn gold" id="btnDeal">딜</button>
-    </div>
+</div>
+  
+  <div id="autoStart" style="
+    position:absolute; left:50%; top:50%;
+    transform: translate(-50%,-50%);
+    width: 160px; height: 160px;
+    border-radius: 999px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap: 6px;
+    background: rgba(0,0,0,.68);
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: 0 24px 90px rgba(0,0,0,.55);
+    z-index: 95;
+    pointer-events:none;
+  ">
+    <div style="font-weight:1100; letter-spacing:.14em; font-size: 12px; opacity:.86;">자동 시작</div>
+    <div id="autoNum" style="font-weight:1200; font-size: 56px; line-height:1; color: rgba(255,222,100,.94);">10</div>
+    <div style="font-weight:950; font-size: 12px; opacity:.72;">초 후 딜</div>
   </div>
+
+
+</div>
 </div>
 
 <script>
@@ -818,7 +819,7 @@
   const winLine3 = $("#winLine3");
   let bannerTimer = null;
 
-  function showBanner(resultKey, isWin, betAmt, gainAmt){
+  function showBanner(resultKey, isWin, betAmt, gainAmt, pairFlags, betSnap){
     const isP = resultKey === "P";
     const isB = resultKey === "B";
     const isT = resultKey === "T";
@@ -838,7 +839,11 @@
       winLine3.textContent = "";
     } else {
       winLine1.textContent = "이겼습니다";
-      winLine2.textContent = "베팅 " + fmt(betAmt) + " + 획득 " + fmt(gainAmt) + " =";
+      const pp = (pairFlags && pairFlags.isPPair) ? (betSnap?.PP||0) : 0;
+      const bp = (pairFlags && pairFlags.isBPair) ? (betSnap?.BP||0) : 0;
+      const pairGain = (pp ? (pp*11 - pp) : 0) + (bp ? (bp*11 - bp) : 0);
+      const mainGain = Math.max(0, gainAmt - pairGain);
+      winLine2.textContent = "일반승리 " + fmt(mainGain) + " · 페어승리 " + fmt(pairGain) + " · 총베팅 " + fmt(betAmt);
       winLine3.textContent = fmt(betAmt + gainAmt);
     }
 
@@ -849,12 +854,11 @@
 
   // ===== 잔액 =====
   let balance = 1000000;
-  let lastDelta = 0;
+  let lastWin = 0;
   function syncStats(){
     $("#uiBalance").textContent = fmt(balance);
-    const sign = lastDelta >= 0 ? "+" : "";
-    $("#uiLast").textContent = (lastDelta === 0) ? fmt(0) : (sign + fmt(Math.abs(lastDelta)));
-    $("#uiLast").style.color = lastDelta >= 0 ? "rgba(255,222,100,.94)" : "rgba(255,120,120,.92)";
+    $("#uiLast").textContent = fmt(lastWin);
+    $("#uiLast").style.color = "rgba(255,222,100,.94)";
   }
   syncStats();
 
@@ -933,18 +937,63 @@
   }
 
   // ===== 베팅 =====
+  // ===== Auto Start (10s) =====
+  const autoStart = document.getElementById("autoStart");
+  const autoNum = document.getElementById("autoNum");
+  let autoTimer = null;
+  let autoRemaining = 10;
+  function stopAuto(){
+    if(autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+    autoRemaining = 10;
+    if(autoStart) autoStart.style.display = "none";
+  }
+  function startAutoIfReady(){
+    if(inRound || pendingExtra) return;
+    if(totalBet() <= 0) { stopAuto(); return; }
+    if(autoTimer) return;
+    autoRemaining = 10;
+    if(autoStart){ autoStart.style.display = "flex"; autoNum.textContent = String(autoRemaining); }
+    autoTimer = setInterval(() => {
+      if(inRound || pendingExtra){ stopAuto(); return; }
+      if(totalBet() <= 0){ stopAuto(); return; }
+      autoRemaining -= 1;
+      if(autoStart) autoNum.textContent = String(autoRemaining);
+      if(autoRemaining <= 0){
+        stopAuto();
+        dealerDeal();
+        dealRound();
+      }
+    }, 1000);
+  }
+
+  // ===== Single-zone betting lock =====
+  let lockedZone = null; // "P" | "B" | "T"
+  function lockCheck(zone){
+    if(!lockedZone) return true;
+    if(zone === "PP") return lockedZone === "P";
+    if(zone === "BP") return lockedZone === "B";
+    return zone === lockedZone;
+  }
+
   let chipValue = 1000;
-  let bet = {P:0, T:0, B:0};
+  let bet = {P:0, T:0, B:0, PP:0, BP:0};
   const stack = [];
-  function totalBet(){ return bet.P + bet.T + bet.B; }
+  function totalBet(){ return bet.P + bet.T + bet.B + bet.PP + bet.BP; }
 
   const elBetP = $("#betP"), elBetT = $("#betT"), elBetB = $("#betB");
+  const elBetPP = document.getElementById("betPP");
+  const elBetBP = document.getElementById("betBP");
   function syncBets(){
     elBetP.textContent = fmt(bet.P);
     elBetT.textContent = fmt(bet.T);
     elBetB.textContent = fmt(bet.B);
+    if(elBetPP) elBetPP.textContent = fmt(bet.PP);
+    if(elBetBP) elBetBP.textContent = fmt(bet.BP);
   }
   syncBets();
+  startAutoIfReady();
+    stopAuto();
+    setTimeout(() => { clearHands(); }, 1700);
 
   function createFlyChip(fromEl, toEl, label){
     const from = fromEl.getBoundingClientRect();
@@ -981,9 +1030,11 @@
   let roundState = null;
 
   function placeBet(zone, amt, anchorEl){
+    if(!lockCheck(zone)) return;
     if(inRound) return;
     if(balance < amt) return;
 
+    if(!lockedZone && (zone==="P"||zone==="B"||zone==="T")) lockedZone = zone;
     balance -= amt;
     bet[zone] += amt;
     stack.push({type:"bet", zone:zone, amt:amt});
@@ -993,9 +1044,14 @@
     const chipEl = document.querySelector("#chips .chip.active") || document.querySelector("#chips .chip");
     const label = (amt >= 1000000) ? "1M" : (amt >= 1000 && amt < 10000 ? String(amt) : (amt>=1000 ? (amt/1000)+"k" : String(amt)));
     if(chipEl && anchorEl) createFlyChip(chipEl, anchorEl, label);
+    startAutoIfReady();
   }
 
-  $$(".seg").forEach(seg => seg.addEventListener("click", () => placeBet(seg.dataset.zone, chipValue, seg)));
+  $$(".seg").forEach(seg => seg.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-zone]");
+    if(btn){ e.stopPropagation(); placeBet(btn.dataset.zone, chipValue, btn); return; }
+    placeBet(seg.dataset.zone, chipValue, seg);
+  }));
 
   $("#chips").addEventListener("click", (e) => {
     const chip = e.target.closest(".chip");
@@ -1012,8 +1068,10 @@
     if(!last) return;
     if(last.type === "bet"){
       bet[last.zone] -= last.amt;
+      if((bet.P+bet.B+bet.T) === 0) lockedZone = null;
       balance += last.amt;
       syncBets(); syncStats();
+      startAutoIfReady();
       return;
     }
     // chip undo
@@ -1040,22 +1098,20 @@
     const cost = totalBet();
     if(balance < cost) return;
     balance -= cost;
-    bet.P *= 2; bet.T *= 2; bet.B *= 2;
+    bet.P *= 2; bet.T *= 2; bet.B *= 2; bet.PP *= 2; bet.BP *= 2;
     stack.push({type:"x2", cost: cost});
     syncBets(); syncStats();
+    startAutoIfReady();
   });
 
   // ===== 카드 슬롯 =====
   const elPlayerCards = $("#playerCards");
-  const elBankerCards = $("#bankerCards");
-  const miniP = $("#miniPlayer");
-  const miniB = $("#miniBanker");
-  const extraWrap = $("#extraBtnWrap");
-  const btnRevealExtra = $("#btnRevealExtra");
+  const elBankerCards = $("#bankerCards");  const extraWrap = $("#extraBtnWrap");
+  const /*btnRevealExtra*/ = $("#/*btnRevealExtra*/");
 
-  function makeSlot(sideways, isMini){
+  function makeSlot(sideways){
     const slot = document.createElement("div");
-    slot.className = (isMini ? "miniCard" : "cardSlot") + (sideways ? " sideways" : "");
+    slot.className = "cardSlot" + (sideways ? " sideways" : "");
     const inner = document.createElement("div");
     inner.className = "cardInner";
 
@@ -1086,6 +1142,7 @@
   }
 
   async function revealSlot(slotObj, card){
+    dealerDeal();
     await sleep(600);
     slotObj.frontImg.src = CARD_BASE + cardFrontFile(card.rank, card.suit);
     slotObj.slot.classList.add("revealed");
@@ -1175,29 +1232,35 @@
     if(bTotal > pTotal) return "B";
     return "T";
   }
-  function payoutFor(result, betSnap){
+  function payoutFor(result, betSnap, pairFlags){
     let payout = 0;
     if(result === "P") payout += betSnap.P * 2;
     if(result === "B") payout += betSnap.B * 1.95;
     if(result === "T") payout += betSnap.T * 9;
+    // Pair payout: "원금의 11배" (total return = bet*11)
+    if(pairFlags && pairFlags.isPPair && betSnap.PP) payout += betSnap.PP * 11;
+    if(pairFlags && pairFlags.isBPair && betSnap.BP) payout += betSnap.BP * 11;
     return payout;
   }
   function settle(result){
     const betSnap = roundState ? roundState.betSnapshot : {P:0,T:0,B:0};
     const tb = roundState ? roundState.totalBet : 0;
 
-    const payout = payoutFor(result, betSnap);
+    const pairFlags = { isPPair: !!roundState?.isPPair, isBPair: !!roundState?.isBPair };
+    const payout = payoutFor(result, betSnap, pairFlags);
     const win = payout > 0;
     const delta = win ? (payout - tb) : (-tb);
     balance += payout;
 
-    lastDelta = delta;
+    if(win) lastWin = Math.max(0, delta);
     syncStats();
     addLog({ res: result, bet: tb, win: win, delta: delta, time: nowTime() });
 
-    showBanner(result, win, tb, Math.max(0, payout - tb));
+    const gain = Math.max(0, payout - tb);
+    showBanner(result, win, tb, gain, pairFlags, betSnap);
 
-    bet = {P:0,T:0,B:0};
+    bet = {P:0,T:0,B:0,PP:0,BP:0};
+    lockedZone = null;
     syncBets();
   }
 
@@ -1208,6 +1271,7 @@
     inRound = true;
 
     winBanner.classList.remove("show");
+    stopAuto();
     extraWrap.style.display = "none";
     pendingExtra = null;
     roundState = null;
@@ -1217,10 +1281,10 @@
     const betSnapshot = {P: bet.P, T: bet.T, B: bet.B};
     const tb = totalBet();
 
-    const P1 = makeSlot(false,false); elPlayerCards.appendChild(P1.slot);
-    const P2 = makeSlot(false,false); elPlayerCards.appendChild(P2.slot);
-    const B1 = makeSlot(false,false); elBankerCards.appendChild(B1.slot);
-    const B2 = makeSlot(false,false); elBankerCards.appendChild(B2.slot);
+    const P1 = makeSlot(false); elPlayerCards.appendChild(P1.slot);
+    const P2 = makeSlot(false); elPlayerCards.appendChild(P2.slot);
+    const B1 = makeSlot(false); elBankerCards.appendChild(B1.slot);
+    const B2 = makeSlot(false); elBankerCards.appendChild(B2.slot);
 
     const mP1 = makeSlot(false,true); miniP.appendChild(mP1.slot);
     const mP2 = makeSlot(false,true); miniP.appendChild(mP2.slot);
@@ -1238,6 +1302,8 @@
 
     let pTotal = sumHand(player);
     let bTotal = sumHand(banker);
+    const isPPair = (player[0].rank === player[1].rank);
+    const isBPair = (banker[0].rank === banker[1].rank);
     const natural = (pTotal >= 8 || bTotal >= 8);
 
     const extra = { p:null, b:null };
@@ -1246,7 +1312,7 @@
       if(shouldPlayerDraw(pTotal)){
         const c = draw();
         player.push(c);
-        const slotBig = makeSlot(true,false); elPlayerCards.appendChild(slotBig.slot);
+        const slotBig = makeSlot(true); elPlayerCards.appendChild(slotBig.slot);
         const slotMini = makeSlot(true,true); miniP.appendChild(slotMini.slot);
         extra.p = {card:c, big:slotBig, mini:slotMini};
       }
@@ -1254,7 +1320,7 @@
       if(shouldBankerDraw(bTotal, extra.p ? extra.p.card.val : null)){
         const c = draw();
         banker.push(c);
-        const slotBig = makeSlot(true,false); elBankerCards.appendChild(slotBig.slot);
+        const slotBig = makeSlot(true); elBankerCards.appendChild(slotBig.slot);
         const slotMini = makeSlot(true,true); miniB.appendChild(slotMini.slot);
         extra.b = {card:c, big:slotBig, mini:slotMini};
       }
@@ -1262,7 +1328,7 @@
       // 엑스트라 존재 -> 클릭 공개 대기
       if(extra.p || extra.b){
         pendingExtra = extra;
-        roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb};
+        roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb, isPPair:isPPair, isBPair:isBPair};
         extraWrap.style.display = "block";
         inRound = false;
         return;
@@ -1270,7 +1336,7 @@
     }
 
     // 엑스트라 없음 -> 0.3초 후 결과
-    roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb};
+    roundState = {player:player, banker:banker, betSnapshot:betSnapshot, totalBet:tb, isPPair:isPPair, isBPair:isBPair};
     const res = resultOf(pTotal, bTotal);
     bigPush(res); renderBig();
     await sleep(300);
@@ -1281,7 +1347,7 @@
 
   $("#btnDeal").addEventListener("click", () => { dealerDeal(); dealRound(); });
 
-  btnRevealExtra.addEventListener("click", async () => { dealerDeal();
+  /*btnRevealExtra*/.addEventListener("click", async () => { dealerDeal();
     if(inRound) return;
     if(!pendingExtra || !roundState) return;
     inRound = true;
@@ -1309,6 +1375,43 @@
     roundState = null;
     inRound = false;
   });
+
+
+  // Click-to-reveal extra cards (instead of a button)
+  document.addEventListener("click", async (e) => {
+    const target = e.target.closest(".cardSlot.clickable");
+    if(!target) return;
+    if(inRound) return;
+    if(!pendingExtra || !roundState) return;
+
+    inRound = true;
+    if(pendingExtra.p) pendingExtra.p.big.slot.classList.remove("clickable");
+    if(pendingExtra.b) pendingExtra.b.big.slot.classList.remove("clickable");
+
+    dealerDeal();
+
+    if(pendingExtra.p){
+      await revealSlot(pendingExtra.p.big, pendingExtra.p.card);
+    }
+    if(pendingExtra.b){
+      await revealSlot(pendingExtra.b.big, pendingExtra.b.card);
+    }
+
+    const pTotal = sumHand(roundState.player);
+    const bTotal = sumHand(roundState.banker);
+    const res = resultOf(pTotal, bTotal);
+
+    bigPush(res); renderBig();
+    await sleep(300);
+    settle(res);
+
+    pendingExtra = null;
+    roundState = null;
+    inRound = false;
+
+    startAutoIfReady();
+  });
+
 
 })();
 </script>
