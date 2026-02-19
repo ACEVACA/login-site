@@ -837,7 +837,9 @@
         <!-- 좌측: 잔액/베팅/최근획득 -->
         <div class="hudBox moneyBox">
           <div class="moneyRow"><span>잔액</span><b class="em" id="balance">₩1,000,000</b></div>
-          
+          <div class="moneyRow"><span>총 베팅</span><b id="betTotalTop">₩0</b></div>
+          <div class="moneyRow"><span>최근 획득</span><b id="lastWin">₩0</b></div>
+        </div>
 
       <!-- 우측하단 그림장(독립) -->
       <div class="road" aria-label="결과 그림장">
@@ -937,6 +939,7 @@ function refreshMoneyUI(){
   document.getElementById("lastWin").textContent = fmtWon(lastWin);
 }
 refreshMoneyUI();
+});
 
 /** ===========
  * 점수(숫자합) 표시
@@ -1064,6 +1067,8 @@ function addBet(zone, amount){
 document.querySelectorAll(".zone").forEach(z=>{
   z.addEventListener("click", ()=>{
     addBet(z.dataset.zone, selectedChip);
+  });
+});
 
 
 /** 되돌리기 */
@@ -1074,6 +1079,7 @@ document.getElementById("btnUndo").addEventListener("click", ()=>{
   bets[last.zone] = Math.max(0, bets[last.zone] - last.amount);
   placeChipVisual(last.zone, bets[last.zone]);
   refreshMoneyUI();
+});
 
 /** ===========
  * 카드 / 슈
@@ -1527,6 +1533,7 @@ onAuthStateChanged(auth, (user) => {
 
 </body>
 </html>
+
 
 
 
