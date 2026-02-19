@@ -12,23 +12,24 @@
       --gold2:#f2d27b;
 
       --panel:rgba(255,255,255,.06);
-      --shadow:rgba(0,0,0,.55);
 
       --cardW:88px;
       --cardH:124px;
 
       --z1: 20px;
 
-      /* 하단 HUD 높이 */
-      --hudH: 150px;
+      --hudH: 98px; /* 하단 HUD 높이 */
+      --hudGap: 10px;
 
-      /* 칩 색상(요청) */
-      --c1000:  #ff57b3; /* 핑크 */
-      --c5000:  #ff2d2d; /* 빨강 */
-      --c10000: #ff8a00; /* 주황 */
-      --c30000: #b6ff00; /* 형광 연두 */
-      --c50000: #ffe600; /* 노랑 */
-      --c100000:#ff8a00; /* 주황(요청대로) */
+      --pBlue: rgba(70,150,255,.18);
+      --bRed: rgba(255,80,80,.18);
+      --tGreen: rgba(70,220,160,.18);
+
+      --pBlue2: rgba(70,150,255,.85);
+      --bRed2: rgba(255,80,80,.85);
+      --tGreen2: rgba(70,220,160,.90);
+
+      --line: rgba(255,255,255,.14);
     }
 
     *{ box-sizing:border-box; }
@@ -46,40 +47,30 @@
       overflow:hidden;
     }
 
-    /* ===== 상단바: 타이틀 + 최소 버튼만 (잔액/베팅은 하단으로 이동) ===== */
+    /* Top bar (최소) */
     .topbar{
       height:56px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 14px;
-      border-bottom:1px solid rgba(200,162,58,.18);
-      background:linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.10));
-      box-shadow: 0 10px 26px rgba(0,0,0,.38);
+      padding:0 16px;
+      border-bottom:1px solid rgba(200,162,58,.22);
+      background:linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.10));
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
     }
     .brand{
       display:flex; align-items:center; gap:10px;
-      letter-spacing:.08em;
+      letter-spacing:.10em;
       font-weight:900;
       opacity:.95;
-      font-size:14px;
+      font-size:13px;
     }
     .dot{
-      width:8px;height:8px;border-radius:99px;background:var(--gold2);
-      box-shadow:0 0 16px rgba(242,210,123,.55);
+      width:8px;height:8px;border-radius:999px;background:var(--gold2);
+      box-shadow:0 0 16px rgba(242,210,123,.65);
     }
-    .topRight{
-      display:flex; align-items:center; gap:8px;
-    }
-    .counter{
-      width:34px;height:34px;border-radius:999px;
-      display:flex;align-items:center;justify-content:center;
-      border:2px solid rgba(242,210,123,.55);
-      color:var(--gold2);
-      font-weight:900;
-      background:rgba(0,0,0,.35);
-      box-shadow: 0 0 0 8px rgba(242,210,123,.06), 0 0 18px rgba(242,210,123,.14);
-      font-size:12px;
+    .statsRight{
+      display:flex; gap:8px; align-items:center;
     }
     .tbtn{
       width:34px;height:34px;border-radius:12px;
@@ -90,7 +81,6 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
     }
     .tbtn:hover{ background:rgba(255,255,255,.10); }
     .tbtn.danger{
@@ -98,74 +88,82 @@
       background:rgba(255,107,107,.10);
     }
 
-    /* ===== Stage ===== */
+    /* Stage */
     .stage{
       height:calc(100% - 56px);
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:12px;
-      padding-bottom: calc(var(--hudH) + 18px);
+      padding:16px;
     }
 
     .frame{
       width:min(1240px, 96vw);
-      height:min(740px, 88vh);
+      height:min(720px, 86vh);
       position:relative;
       perspective:1100px;
     }
 
-    /* ===== 비디오 영역 (LIVE 배너 제거 반영) ===== */
+    /* video placeholder */
     .video{
       position:absolute;
       top:14px; left:50%;
       transform:translateX(-50%);
       width:min(980px, 92%);
-      height:220px;
+      height:210px;
       border-radius:16px;
       border:1px solid rgba(200,162,58,.30);
       background:
         radial-gradient(700px 260px at 50% 15%, rgba(242,210,123,.14), transparent 55%),
         radial-gradient(520px 220px at 20% 35%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.10));
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.12));
       box-shadow: 0 26px 70px rgba(0,0,0,.55);
       overflow:hidden;
-      backdrop-filter: blur(10px);
+    }
+    .video::before{
+      content:"";
+      position:absolute; inset:-30px -60px auto -60px;
+      height:240px;
+      background: radial-gradient(closest-side at 50% 40%, rgba(255,255,255,.12), transparent 70%);
+      transform: rotate(-6deg);
+      pointer-events:none;
+      opacity:.9;
     }
     .limit{
       position:absolute;
-      left:14px; top:12px;
+      left:16px; top:12px;
       font-size:12px;
       color:rgba(255,255,255,.85);
-      padding:7px 10px;
+      padding:8px 10px;
       border-radius:999px;
-      background:rgba(0,0,0,.32);
-      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.34);
+      border:1px solid rgba(255,255,255,.10);
     }
     .limit b{ color:var(--gold2); }
 
-    /* ===== 테이블: 아래로 이동(요청 4) ===== */
+    /* Table - 하단 HUD 바로 위로 내림 */
     .tableWrap{
       position:absolute;
       left:50%;
-      bottom: calc(var(--hudH) + 22px);
+      bottom: calc(var(--hudH) + var(--hudGap) + 8px);
       transform:translateX(-50%) rotateX(10deg);
       width:min(1080px, 96%);
-      height:280px;
+      height:270px;
       border-radius:999px;
-      border:1px solid rgba(200,162,58,.24);
+      border:1px solid rgba(200,162,58,.22);
       background:
         radial-gradient(900px 360px at 50% 20%, rgba(242,210,123,.10), transparent 55%),
         linear-gradient(180deg, #130002, #060001);
       box-shadow: 0 34px 90px rgba(0,0,0,.68);
       padding:14px;
     }
+
     .tableSurface{
       width:100%; height:100%;
       border-radius:999px;
       background:
         radial-gradient(1200px 260px at 50% 35%, rgba(255,255,255,.10), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.18));
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.20));
       position:relative;
       overflow:hidden;
     }
@@ -184,7 +182,6 @@
       gap:14px;
     }
 
-    /* ===== 영역 색상(파랑/초록/빨강) + 정렬 다듬기 ===== */
     .zone{
       position:relative;
       border-radius:18px;
@@ -192,39 +189,47 @@
       overflow:hidden;
       background: rgba(255,255,255,.04);
     }
+
+    /* 요청: PLAYER=파랑 / TIE=초록 / BANKER=빨강 + 정렬 다듬기 */
     .zone.player{
       background:
-        radial-gradient(260px 160px at 25% 25%, rgba(35,120,255,.28), transparent 70%),
+        radial-gradient(240px 160px at 20% 20%, var(--pBlue), transparent 72%),
         rgba(255,255,255,.04);
-      border-color: rgba(35,120,255,.22);
+      border-color: rgba(70,150,255,.18);
     }
     .zone.tie{
       background:
-        radial-gradient(260px 160px at 50% 25%, rgba(60,255,130,.22), transparent 70%),
+        radial-gradient(240px 160px at 20% 20%, var(--tGreen), transparent 72%),
         rgba(255,255,255,.04);
-      border-color: rgba(60,255,130,.18);
+      border-color: rgba(70,220,160,.18);
     }
     .zone.banker{
       background:
-        radial-gradient(260px 160px at 25% 25%, rgba(255,55,55,.25), transparent 70%),
+        radial-gradient(240px 160px at 20% 20%, var(--bRed), transparent 72%),
         rgba(255,255,255,.04);
-      border-color: rgba(255,55,55,.18);
+      border-color: rgba(255,80,80,.18);
     }
 
     .zoneHeader{
-      position:absolute; left:12px; top:10px;
-      font-weight:900; letter-spacing:.18em;
+      position:absolute; left:14px; top:10px;
+      font-weight:900; letter-spacing:.16em;
       font-size:12px; opacity:.92;
-      text-transform:uppercase;
     }
     .odds{
-      position:absolute; right:12px; top:10px;
+      position:absolute; right:14px; top:10px;
       font-size:11px; color:rgba(255,255,255,.8);
       opacity:.85;
     }
 
+    /* 베팅잠김 상태 */
+    .zone.locked{
+      filter: grayscale(.25);
+      opacity:.70;
+      pointer-events:none;
+    }
+
     .betTotal{
-      position:absolute; left:12px; bottom:10px;
+      position:absolute; left:14px; bottom:10px;
       font-size:12px;
       color:rgba(255,255,255,.9);
       padding:6px 10px;
@@ -232,9 +237,8 @@
       background:rgba(0,0,0,.25);
       border:1px solid rgba(255,255,255,.10);
     }
-    .betTotal span{ opacity:.75; margin-right:6px; }
 
-    /* Cards layout inside zones */
+    /* 카드 슬롯 */
     .cardRow{
       position:absolute;
       left:50%;
@@ -253,13 +257,12 @@
       height:var(--cardH);
       border-radius:12px;
       background:
-        radial-gradient(120px 70px at 35% 25%, rgba(255,255,255,.08), transparent 70%),
+        radial-gradient(120px 70px at 35% 25%, rgba(255,255,255,.07), transparent 70%),
         rgba(0,0,0,.14);
       border:1px solid rgba(255,255,255,.12);
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.22);
       position:relative;
       transform: translateZ(var(--z1));
-      overflow:hidden;
     }
 
     /* 3D card */
@@ -270,7 +273,8 @@
       left:0; top:0;
       border-radius:12px;
       transform-style:preserve-3d;
-      filter: drop-shadow(0 14px 22px rgba(0,0,0,.45));
+      /* 렉 줄이기 위해 drop-shadow 최소화 */
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.40));
     }
     .cardInner{
       width:100%; height:100%;
@@ -286,7 +290,7 @@
       border-radius:12px;
       overflow:hidden;
       backface-visibility:hidden;
-      border:1px solid rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.16);
       background:rgba(0,0,0,.10);
     }
     .frontFace{ transform: rotateY(0deg); }
@@ -300,171 +304,242 @@
     }
 
     /* deal animation */
-    .dealFromShoe{ animation: deal 0.55s ease-out forwards; }
+    .dealFromShoe{ animation: deal 0.52s ease-out forwards; }
     @keyframes deal{
-      0%{ transform: translate(360px,-160px) rotateZ(10deg) scale(.95); opacity:0; }
+      0%{ transform: translate(340px,-150px) rotateZ(10deg) scale(.95); opacity:0; }
       100%{ transform: translate(0,0) rotateZ(0deg) scale(1); opacity:1; }
     }
 
-    /* ===== 3번째 카드: "클릭해서 공개" 안내 오버레이 ===== */
-    .tapReveal{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(0,0,0,.35);
-      border:1px dashed rgba(242,210,123,.35);
-      border-radius:12px;
-      font-weight:900;
-      letter-spacing:.06em;
-      font-size:12px;
-      color: rgba(255,255,255,.92);
-      pointer-events:auto;
+    /* 3번째 카드 클릭 유도 (오버레이/블러 없음, 카드만 살짝 강조) */
+    .card3d.clickReveal{
       cursor:pointer;
-      backdrop-filter: blur(2px);
+      pointer-events:auto;
+      outline:2px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 8px rgba(255,255,255,.03);
+      animation: pulse 1.0s ease-in-out infinite;
     }
-    .tapReveal:hover{ background: rgba(0,0,0,.45); }
+    @keyframes pulse{
+      0%,100%{ transform: translateZ(0) scale(1); }
+      50%{ transform: translateZ(0) scale(1.02); }
+    }
 
-    /* ===== 하단 HUD: 잔액/총베팅/칩/부가UI/그림장 전부 최하단 배치(요청 3) ===== */
-    .hud{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      height:var(--hudH);
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      padding:14px 14px 16px;
-      background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.45) 35%, rgba(0,0,0,.70));
-      z-index:50;
+    /* 배너(결과) - Evolution 느낌 */
+    .resultBanner{
+      position:absolute;
+      left:50%;
+      top: 272px; /* 비디오 아래쯤 */
+      transform:translateX(-50%);
+      min-width: 320px;
+      max-width: min(640px, 92%);
+      border-radius: 10px;
+      overflow:hidden;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 50;
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: none; /* blur 없음 */
+    }
+    .resultBanner.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(-6px);
+    }
+    .rbTop{
+      padding:8px 14px;
+      font-weight:900;
+      letter-spacing:.12em;
+      font-size:12px;
+      text-transform:uppercase;
+      text-align:center;
+      color:#fff;
+    }
+    .rbBody{
+      padding:10px 14px 12px;
+      display:grid;
+      gap:6px;
+      text-align:center;
+      background: rgba(0,0,0,.28);
+    }
+    .rbLine1{
+      font-size:13px;
+      color: rgba(255,255,255,.86);
+      font-weight:800;
+    }
+    .rbAmount{
+      font-size:20px;
+      font-weight:1000;
+      letter-spacing:.02em;
+    }
+    .rbSub{
+      font-size:12px;
+      color: rgba(255,255,255,.72);
+    }
+    .rbP .rbTop{ background: linear-gradient(90deg, rgba(70,150,255,.95), rgba(40,110,220,.90)); }
+    .rbB .rbTop{ background: linear-gradient(90deg, rgba(255,80,80,.95), rgba(210,40,40,.90)); }
+    .rbT .rbTop{ background: linear-gradient(90deg, rgba(70,220,160,.95), rgba(20,160,110,.90)); }
+    .rbP .rbAmount{ color: rgba(150,210,255,.98); }
+    .rbB .rbAmount{ color: rgba(255,180,180,.98); }
+    .rbT .rbAmount{ color: rgba(170,255,220,.98); }
+
+    /* placed chip on zone */
+    .placedChip{
+      position:absolute;
+      left:50%;
+      top:62%;
+      transform:translate(-50%,-50%);
+      width:54px;height:54px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;font-size:12px;
+      color:rgba(0,0,0,.90);
+      border:1px solid rgba(255,255,255,.26);
+      box-shadow:0 12px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);
+      animation: pop .18s ease-out;
       pointer-events:none;
     }
-    .hudInner{
-      width:min(1180px, 96vw);
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:14px;
-      pointer-events:auto;
+    @keyframes pop{
+      0%{ transform:translate(-50%,-50%) scale(.96); }
+      60%{ transform:translate(-50%,-50%) scale(1.05); }
+      100%{ transform:translate(-50%,-50%) scale(1.02); }
     }
 
-    .moneyPanel{
-      display:flex;
-      gap:10px;
-      align-items:flex-end;
-    }
-    .mBox{
-      width:150px;
+    /* 하단 HUD (잔액/베팅/칩/그림장/버튼) */
+    .hud{
+      position:absolute;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      width:min(1100px, 96%);
+      height: var(--hudH);
+      display:grid;
+      grid-template-columns: 280px 1fr 330px;
+      gap:12px;
+      align-items:center;
       padding:10px 12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.55);
-      box-shadow: 0 18px 45px rgba(0,0,0,.55);
-    }
-    .mLabel{
-      font-size:11px;
-      letter-spacing:.14em;
-      opacity:.75;
-      margin-bottom:4px;
-    }
-    .mValue{
-      font-weight:900;
-      font-size:16px;
-      letter-spacing:.02em;
-      white-space:nowrap;
+      border-radius: 20px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.52);
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
     }
 
-    /* 칩 랙 (중앙 하단) */
-    .chipRack{
+    .hudBox{
+      height:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(240px 90px at 30% 20%, rgba(255,255,255,.08), transparent 70%),
+        rgba(255,255,255,.04);
+      padding:10px 12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:8px;
+      overflow:hidden;
+    }
+
+    .moneyRow{
       display:flex;
       gap:10px;
       align-items:center;
-      justify-content:center;
-      padding:10px 12px;
-      border-radius:999px;
-      background: rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 18px 45px rgba(0,0,0,.55);
-      user-select:none;
-      flex-wrap:wrap;
-      min-height:72px;
+      justify-content:space-between;
+      font-size:12px;
+      color:rgba(255,255,255,.82);
+    }
+    .moneyRow b{
+      font-size:13px;
+      color:#fff;
+      letter-spacing:.02em;
     }
 
-    /* 에볼루션 느낌 칩: 테두리/분할 링/색 채움(투명 X) + DRAG 제거 */
+    /* Chips - Evolution 스타일 3D */
+    .chipRack{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      user-select:none;
+    }
+
     .chip{
       width:58px; height:58px;
       border-radius:999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:grid;
+      place-items:center;
       font-weight:1000;
       font-size:12px;
-      color: rgba(0,0,0,.9);
+      color:#0a0a0a;
       cursor:grab;
       position:relative;
-      border:2px solid rgba(255,255,255,.75);
-      box-shadow: 0 10px 18px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.35);
-      overflow:hidden;
-      transform: translateY(-2px);
+      border: 2px solid rgba(255,255,255,.22);
+      box-shadow:
+        0 12px 18px rgba(0,0,0,.45),
+        inset 0 2px 0 rgba(255,255,255,.18),
+        inset 0 -10px 18px rgba(0,0,0,.22);
+      transform: translateY(-1px);
     }
-    .chip:active{ cursor:grabbing; transform: translateY(-1px) scale(.98); }
+    .chip:active{ cursor:grabbing; transform: translateY(0px) scale(.99); }
+
+    /* 링/분할 느낌 */
     .chip::before{
       content:"";
       position:absolute; inset:7px;
       border-radius:999px;
-      border:2px dashed rgba(255,255,255,.70);
+      border: 2px dashed rgba(255,255,255,.55);
       opacity:.85;
+      mix-blend-mode: screen;
     }
     .chip::after{
       content:"";
-      position:absolute; inset:-20px;
-      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.75), transparent 45%);
-      opacity:.55;
-      transform: rotate(-12deg);
-      pointer-events:none;
-    }
-    .chip span{ position:relative; z-index:1; }
-    .chip.active{
-      outline:3px solid rgba(242,210,123,.75);
-      box-shadow: 0 0 24px rgba(242,210,123,.25), 0 12px 22px rgba(0,0,0,.50);
-    }
-
-    /* 칩 색 매핑 */
-    .chip[data-v="1000"]{ background: var(--c1000); }
-    .chip[data-v="5000"]{ background: var(--c5000); }
-    .chip[data-v="10000"]{ background: var(--c10000); }
-    .chip[data-v="30000"]{ background: var(--c30000); }
-    .chip[data-v="50000"]{ background: var(--c50000); }
-    .chip[data-v="100000"]{ background: var(--c100000); }
-
-    /* 액션 버튼 + 선택칩 표시 */
-    .actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:18px;
-      background: rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 18px 45px rgba(0,0,0,.55);
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      min-width: 280px;
-    }
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:8px 10px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      position:absolute; inset:16px;
       border-radius:999px;
-      font-size:12px;
-      color:rgba(255,255,255,.92);
-      white-space:nowrap;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.92), rgba(255,255,255,.18) 45%, rgba(0,0,0,.10) 78%);
+      opacity:.85;
+    }
+    .chip span{
+      position:relative;
+      z-index:2;
+      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+    }
+
+    .chip.active{
+      outline: 2px solid rgba(242,210,123,.85);
+      box-shadow:
+        0 0 0 6px rgba(242,210,123,.08),
+        0 14px 22px rgba(0,0,0,.50),
+        inset 0 2px 0 rgba(255,255,255,.18),
+        inset 0 -10px 18px rgba(0,0,0,.22);
+    }
+
+    /* 칩 색상 (요청값) */
+    .chip.v1000  { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #ff4fd8; } /* 핑크 */
+    .chip.v5000  { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #ff3b3b; } /* 빨강 */
+    .chip.v10000 { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #ff8a2a; } /* 주황 */
+    .chip.v30000 { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #9CFF2E; } /* 형광연두 */
+    .chip.v50000 { background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #FFD62E; } /* 노랑 */
+    .chip.v100000{ background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.2) 35%, rgba(0,0,0,.12) 70%), #ff8a2a; } /* 주황(100K) */
+
+    /* 우측 세로 그림장 */
+    .roadBox{
+      position:relative;
+      height:100%;
+      display:grid;
+      grid-template-columns: 1fr 128px;
+      gap:10px;
+      align-items:stretch;
+    }
+
+    .actionCol{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      justify-content:center;
+      align-items:stretch;
     }
     .btn{
-      padding:10px 14px;
-      border-radius:14px;
+      height:36px;
+      border-radius:12px;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.08);
       color:#fff;
@@ -476,157 +551,120 @@
     .btn:hover{ background:rgba(255,255,255,.10); }
     .btn.primary{
       border-color: rgba(242,210,123,.65);
-      background: linear-gradient(180deg, rgba(255,230,160,.95), rgba(200,162,58,.80));
+      background:
+        linear-gradient(180deg, rgba(255,230,160,.95), rgba(200,162,58,.80));
       color:rgba(0,0,0,.88);
-      box-shadow: 0 14px 26px rgba(0,0,0,.40), 0 0 22px rgba(242,210,123,.16);
+      box-shadow: 0 12px 22px rgba(0,0,0,.40), 0 0 22px rgba(242,210,123,.14);
     }
-    .btn.primary:active{ transform: translateY(1px); }
-
-    /* 배팅칩(영역 위에 표시) */
-    .placedChip{
-      position:absolute;
-      left:50%;
-      top:62%;
-      transform:translate(-50%,-50%);
-      width:52px;height:52px;border-radius:999px;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:1000;font-size:12px;color:rgba(0,0,0,.9);
-      border:2px solid rgba(255,255,255,.75);
-      box-shadow:0 10px 18px rgba(0,0,0,.40), inset 0 1px 0 rgba(255,255,255,.35);
-      animation: pop .18s ease-out;
-      pointer-events:none;
-      overflow:hidden;
-    }
-    .placedChip::before{
-      content:"";
-      position:absolute; inset:7px;
-      border-radius:999px;
-      border:2px dashed rgba(255,255,255,.70);
-      opacity:.85;
-    }
-    .placedChip::after{
-      content:"";
-      position:absolute; inset:-20px;
-      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.75), transparent 45%);
+    .btn:disabled{
       opacity:.55;
-      transform: rotate(-12deg);
-      pointer-events:none;
-    }
-    .placedChip span{ position:relative; z-index:1; }
-
-    @keyframes pop{
-      0%{ transform:translate(-50%,-50%) translateY(0) scale(1); }
-      50%{ transform:translate(-50%,-50%) translateY(-3px) scale(1.06); }
-      100%{ transform:translate(-50%,-50%) translateY(-2px) scale(1.02); }
+      cursor:not-allowed;
+      filter: grayscale(.2);
     }
 
-    /* ===== 결과 배너: 요청한 이미지 느낌으로 (위 컬러바 + 중앙 텍스트 + 금액) ===== */
-    .resultBanner{
+    .roadmap{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        linear-gradient(0deg, rgba(255,255,255,.94), rgba(255,255,255,.90));
+      padding:8px;
+      overflow:hidden;
+      position:relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+    }
+    .roadGrid{
+      height:100%;
+      width:100%;
+      display:flex;
+      flex-direction:column-reverse; /* 최신이 아래에 쌓임 */
+      gap:6px;
+      overflow:hidden;
+    }
+    .roadCell{
+      height:16px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:8px;
+    }
+    .dot{
+      width:14px;height:14px;border-radius:999px;
+      background: transparent;
+      border:2px solid #333;
+      position:relative;
+    }
+    .dot.player{ border-color: #2f7bff; }
+    .dot.banker{ border-color: #ff3b3b; }
+    .dot.tie{ border-color: #21c07a; } /* (직접 사용하진 않고 빗금으로 표현) */
+
+    /* 타이 빗금: 직전 도트에 초록 대각선 */
+    .dot .slash{
+      position:absolute;
+      left:50%; top:50%;
+      width:16px; height:2px;
+      background:#21c07a;
+      transform:translate(-50%,-50%) rotate(-45deg);
+      border-radius:2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.65);
+    }
+
+    /* 메시지(토스트) */
+    .toast{
       position:absolute;
       left:50%;
-      top: 320px; /* 비디오 아래쪽/테이블 위쪽 */
+      bottom: calc(var(--hudH) + 28px);
       transform:translateX(-50%);
-      width:min(520px, 92%);
-      border-radius:14px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.65);
-      box-shadow: 0 22px 70px rgba(0,0,0,.65);
-      z-index:80;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(0,0,0,.52);
+      border:1px solid rgba(242,210,123,.18);
+      font-size:13px;
+      color:rgba(255,255,255,.9);
       opacity:0;
       pointer-events:none;
-      transition: opacity .18s ease, transform .18s ease;
-      backdrop-filter: blur(8px);
+      transition:opacity .18s ease, transform .18s ease;
+      white-space:nowrap;
+      z-index:60;
     }
-    .resultBanner.show{
+    .toast.show{
       opacity:1;
       transform:translateX(-50%) translateY(-6px);
     }
-    .rbTop{
-      height:10px;
-      background:#2b7cff;
-    }
-    .rbBody{
-      padding:12px 14px 14px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      gap:6px;
-    }
-    .rbTitle{
-      font-weight:1000;
-      letter-spacing:.16em;
-      font-size:13px;
-      opacity:.95;
-      text-transform:uppercase;
-    }
-    .rbMoney{
-      font-weight:1000;
-      font-size:20px;
-      letter-spacing:.02em;
+
+    /* History/Help 모달은 이번 버전에서 생략(원하면 다시 붙여줌) */
+    .counter{
+      width:34px;height:34px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      border:2px solid rgba(242,210,123,.55);
+      color:var(--gold2);
+      font-weight:900;
+      background:rgba(0,0,0,.35);
+      box-shadow: 0 0 0 8px rgba(242,210,123,.06), 0 0 18px rgba(242,210,123,.18);
     }
 
-    .rbBlue .rbTop{ background:#2b7cff; }
-    .rbRed  .rbTop{ background:#ff3434; }
-    .rbGreen .rbTop{ background:#2eea7f; }
-
-    /* ===== 그림장(로드맵/보드): 우측 최하단, 여백 남김 (요청 5) ===== */
-    .road{
-      width: min(360px, 30vw);
-      height: 98px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.12);
-      background:
-        linear-gradient(0deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      box-shadow:0 18px 45px rgba(0,0,0,.55);
-      overflow:hidden;
-      padding:10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .grid{
-      width:100%;
-      height:100%;
-      background:
-        linear-gradient(#ffffff22 1px, transparent 1px) 0 0 / 20px 20px,
-        linear-gradient(90deg, #ffffff22 1px, transparent 1px) 0 0 / 20px 20px;
-      border-radius:8px;
-      position:relative;
-      overflow:hidden;
-    }
-    .dotCell{
-      position:absolute;
-      width:12px;height:12px;border-radius:999px;
-      border:2px solid #fff;
-      background: transparent;
-      box-shadow:none;
-    }
-    .dotPlayer{ border-color:#2b7cff; }
-    .dotBanker{ border-color:#ff3434; }
-    .dotTie{
-      border-color:#2eea7f;
-    }
-    /* 타이: "이전 결과 위에 빗금" 느낌 */
-    .tieSlash{
-      position:absolute;
-      inset:-6px;
-      background: repeating-linear-gradient(135deg, rgba(46,234,127,.0) 0 6px, rgba(46,234,127,.85) 6px 8px);
-      transform: rotate(0deg);
-      opacity:.95;
-      pointer-events:none;
-    }
-
-    /* 모바일 */
-    @media (max-width: 720px){
-      :root{ --cardW:74px; --cardH:106px; --hudH: 170px; }
+    @media (max-width: 980px){
+      :root{ --cardW:76px; --cardH:108px; --hudH: 112px; }
       .video{ height:180px; }
-      .stage{ padding:10px; padding-bottom: calc(var(--hudH) + 18px); }
-      .tableWrap{ height:270px; }
-      .mBox{ width:140px; }
-      .road{ width: min(340px, 86vw); }
+      .hud{ grid-template-columns: 240px 1fr 300px; }
+      .chip{ width:54px; height:54px; }
+      .tableWrap{ height:260px; }
+    }
+    @media (max-width: 720px){
+      :root{ --cardW:70px; --cardH:100px; --hudH: 126px; }
+      .topbar{ height:52px; }
+      .stage{ padding:10px; }
+      .frame{ height:min(760px, 88vh); }
+      .hud{
+        grid-template-columns: 1fr;
+        height: auto;
+        gap:10px;
+        padding:10px;
+      }
+      .hudBox{ height: 66px; }
+      .chipRack{ justify-content:space-between; }
+      .roadBox{ grid-template-columns: 1fr 1fr; }
+      .tableWrap{ bottom: calc(var(--hudGap) + 210px); }
+      .toast{ bottom: 200px; }
     }
   </style>
 </head>
@@ -634,7 +672,7 @@
 <body>
   <div class="topbar">
     <div class="brand"><span class="dot"></span><span>코리안 바카라 A</span></div>
-    <div class="topRight">
+    <div class="statsRight">
       <div class="counter" id="shoeRemain">0</div>
       <button class="tbtn" id="btnHome" title="홈">🏠</button>
       <button class="tbtn danger" id="btnLogout" title="로그아웃">⎋</button>
@@ -643,16 +681,18 @@
 
   <div class="stage">
     <div class="frame">
+
       <div class="video">
         <div class="limit">LIMIT <b>₩1,000</b> ~ <b>₩30,000,000</b></div>
       </div>
 
       <!-- 결과 배너 -->
-      <div class="resultBanner" id="resultBanner">
-        <div class="rbTop"></div>
+      <div class="resultBanner" id="resultBanner" aria-live="polite">
+        <div class="rbTop" id="rbTop">PLAYER</div>
         <div class="rbBody">
-          <div class="rbTitle" id="rbTitle">BANKER</div>
-          <div class="rbMoney" id="rbMoney">+0</div>
+          <div class="rbLine1" id="rbLine1">승리</div>
+          <div class="rbAmount" id="rbAmount">₩0</div>
+          <div class="rbSub" id="rbSub">획득</div>
         </div>
       </div>
 
@@ -662,7 +702,7 @@
             <div class="zone player" data-zone="player">
               <div class="zoneHeader">PLAYER</div>
               <div class="odds">1:1</div>
-              <div class="betTotal"><span>베팅</span><b id="betPlayer">0</b></div>
+              <div class="betTotal">베팅: <b id="betPlayer">0</b></div>
               <div class="cardRow" id="rowPlayer">
                 <div class="cardSlot" data-slot="p0"></div>
                 <div class="cardSlot" data-slot="p1"></div>
@@ -674,7 +714,7 @@
             <div class="zone tie" data-zone="tie">
               <div class="zoneHeader">TIE</div>
               <div class="odds">8:1</div>
-              <div class="betTotal"><span>베팅</span><b id="betTie">0</b></div>
+              <div class="betTotal">베팅: <b id="betTie">0</b></div>
               <div class="cardRow" id="rowTie"></div>
               <div id="chipTie"></div>
             </div>
@@ -682,7 +722,7 @@
             <div class="zone banker" data-zone="banker">
               <div class="zoneHeader">BANKER</div>
               <div class="odds">1:0.95</div>
-              <div class="betTotal"><span>베팅</span><b id="betBanker">0</b></div>
+              <div class="betTotal">베팅: <b id="betBanker">0</b></div>
               <div class="cardRow" id="rowBanker">
                 <div class="cardSlot" data-slot="b0"></div>
                 <div class="cardSlot" data-slot="b1"></div>
@@ -694,39 +734,37 @@
         </div>
       </div>
 
-    </div>
-  </div>
+      <div class="toast" id="toast"></div>
 
-  <!-- 하단 HUD (요청 3) -->
-  <div class="hud">
-    <div class="hudInner">
-      <!-- 왼쪽 하단: 잔액 / 총 베팅금 -->
-      <div class="moneyPanel">
-        <div class="mBox">
-          <div class="mLabel">잔액</div>
-          <div class="mValue" id="balance">0</div>
+      <!-- 하단 HUD -->
+      <div class="hud">
+        <!-- 왼쪽: 잔액/베팅/최근획득 -->
+        <div class="hudBox">
+          <div class="moneyRow"><span>잔액</span><b id="balance">0</b></div>
+          <div class="moneyRow"><span>총 베팅</span><b id="betTotalTop">0</b></div>
+          <div class="moneyRow"><span>최근 획득</span><b id="lastWin">0</b></div>
         </div>
-        <div class="mBox">
-          <div class="mLabel">총 베팅금</div>
-          <div class="mValue" id="betTotalTop">0</div>
+
+        <!-- 가운데: 칩 -->
+        <div class="hudBox" style="padding:10px 10px;">
+          <div class="chipRack" id="chipRack"></div>
+        </div>
+
+        <!-- 오른쪽: 그림장 + 버튼 -->
+        <div class="hudBox" style="padding:10px;">
+          <div class="roadBox">
+            <div class="roadmap">
+              <div class="roadGrid" id="roadGrid"></div>
+            </div>
+            <div class="actionCol">
+              <button class="btn" id="btnUndo" type="button">되돌리기</button>
+              <button class="btn" id="btnClear" type="button">초기화</button>
+              <button class="btn primary" id="btnDeal" type="button">딜</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 중앙 하단: 칩 -->
-      <div class="chipRack" id="chipRack"></div>
-
-      <!-- 오른쪽 하단: 액션 + 그림장 -->
-      <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
-        <div class="road">
-          <div class="grid" id="roadGrid"></div>
-        </div>
-        <div class="actions">
-          <div class="pill">선택 칩 <b id="selChipTop" style="margin-left:6px;">0</b></div>
-          <button class="btn" id="btnUndo" type="button">되돌리기</button>
-          <button class="btn" id="btnClear" type="button">초기화</button>
-          <button class="btn primary" id="btnDeal" type="button">딜</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -734,35 +772,19 @@
 /** ===========
  * Utils
  * =========== */
-const fmt = (n)=> Number(n||0).toLocaleString("ko-KR");
+const fmt = (n)=> "₩" + Number(n||0).toLocaleString("ko-KR");
 const sleep = (ms)=> new Promise(r=>setTimeout(r,ms));
 
-/** ===========
- * 결과 배너 (요청 1 + 2)
- * - 3번째 카드 뜨는 중간엔 절대 안띄움
- * - 라운드 최종 결과에서만 4초 보여주고 사라짐
- * =========== */
-let bannerTimer = null;
-function showResultBanner({winner, moneyText}){
-  const banner = document.getElementById("resultBanner");
-  const title = document.getElementById("rbTitle");
-  const money = document.getElementById("rbMoney");
-
-  banner.classList.remove("rbBlue","rbRed","rbGreen");
-  if(winner==="player") banner.classList.add("rbBlue");
-  else if(winner==="banker") banner.classList.add("rbRed");
-  else banner.classList.add("rbGreen");
-
-  title.textContent = (winner==="player" ? "PLAYER" : winner==="banker" ? "BANKER" : "TIE");
-  money.textContent = moneyText;
-
-  banner.classList.add("show");
-  clearTimeout(bannerTimer);
-  bannerTimer = setTimeout(()=> banner.classList.remove("show"), 4000);
+function toast(text){
+  const el = document.getElementById("toast");
+  el.textContent = text;
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>el.classList.remove("show"), 1500);
 }
 
 /** ===========
- *  Sound (no external files)
+ * Sound (간단 강화 버전)
  * =========== */
 let audioCtx = null;
 function ensureAudio(){
@@ -786,15 +808,15 @@ function tone({freq=440, dur=0.06, type="sine", gain=0.10}){
 }
 function sfx(name){
   if(name==="chip"){
-    tone({freq:720, dur:0.04, type:"triangle", gain:0.07});
-    setTimeout(()=>tone({freq:520, dur:0.05, type:"triangle", gain:0.06}), 25);
+    tone({freq:760, dur:0.04, type:"triangle", gain:0.07});
+    setTimeout(()=>tone({freq:540, dur:0.05, type:"triangle", gain:0.06}), 25);
   }
   if(name==="deal"){
-    tone({freq:260, dur:0.07, type:"sine", gain:0.06});
-    setTimeout(()=>tone({freq:340, dur:0.05, type:"sine", gain:0.04}), 40);
+    tone({freq:240, dur:0.08, type:"sine", gain:0.06});
+    setTimeout(()=>tone({freq:320, dur:0.06, type:"sine", gain:0.05}), 40);
   }
   if(name==="flip"){
-    tone({freq:980, dur:0.035, type:"square", gain:0.03});
+    tone({freq:980, dur:0.04, type:"square", gain:0.025});
   }
   if(name==="win"){
     tone({freq:523.25, dur:0.08, type:"sine", gain:0.07});
@@ -802,12 +824,48 @@ function sfx(name){
     setTimeout(()=>tone({freq:783.99, dur:0.12, type:"sine", gain:0.08}), 170);
   }
   if(name==="lose"){
-    tone({freq:196, dur:0.12, type:"sine", gain:0.06});
+    tone({freq:196, dur:0.14, type:"sine", gain:0.06});
   }
 }
 
 /** ===========
- *  Cards / Shoe (6 decks default)
+ * Roadmap (세로) + Tie는 직전 결과에 빗금
+ * =========== */
+const road = []; // {winner: "player"|"banker", ties: number}
+function renderRoad(){
+  const grid = document.getElementById("roadGrid");
+  grid.innerHTML = "";
+  const maxRows = 18;
+  const slice = road.slice(-maxRows);
+  for(const r of slice){
+    const row = document.createElement("div");
+    row.className = "roadCell";
+    const dot = document.createElement("div");
+    dot.className = "dot " + r.winner;
+    if((r.ties||0) > 0){
+      const slash = document.createElement("div");
+      slash.className = "slash";
+      dot.appendChild(slash);
+    }
+    row.appendChild(dot);
+
+    // (텍스트 없음 요청) => 점만
+    grid.appendChild(row);
+  }
+}
+function pushRoad(winner){
+  if(winner==="tie"){
+    // 타이는 직전 결과 위에 빗금 (직전 결과가 없으면 무시)
+    const last = road[road.length-1];
+    if(last) last.ties = (last.ties||0) + 1;
+  }else{
+    road.push({ winner, ties: 0 });
+  }
+  renderRoad();
+}
+
+/** ===========
+ * Cards / Shoe
  * =========== */
 const suits = ["S","H","D","C"];
 const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
@@ -850,7 +908,7 @@ function maybeReshuffle(){
   if(shoe.length <= threshold){
     shoe = makeShoe(DECKS);
     updateShoeUI();
-    // 재셔플은 배너 말고 그냥 조용히
+    toast("슈 재셔플");
   }
 }
 function drawFromShoe(){
@@ -861,37 +919,59 @@ function drawFromShoe(){
 }
 
 /** ===========
- *  UI: chip drag/drop betting
+ * Money / Betting
  * =========== */
 let balance = 1000000;
+let lastWin = 0;
+
 const bets = { player:0, banker:0, tie:0 };
 const betStack = [];
 
+function totalBet(){
+  return bets.player + bets.banker + bets.tie;
+}
+
 function refreshMoneyUI(){
   document.getElementById("balance").textContent = fmt(balance);
+  document.getElementById("lastWin").textContent = fmt(lastWin);
   document.getElementById("betPlayer").textContent = fmt(bets.player);
   document.getElementById("betBanker").textContent = fmt(bets.banker);
   document.getElementById("betTie").textContent = fmt(bets.tie);
-  const total = bets.player + bets.banker + bets.tie;
-  document.getElementById("betTotalTop").textContent = fmt(total);
+  document.getElementById("betTotalTop").textContent = fmt(totalBet());
 }
 refreshMoneyUI();
 
-const chipValues = [1000, 5000, 10000, 30000, 50000, 100000];
-let selectedChip = chipValues[1];
+/* 한 곳만 베팅 */
+function otherZoneHasBet(zone){
+  return Object.keys(bets).some(k => k !== zone && bets[k] > 0);
+}
 
-function chipLabel(v){
-  if(v===1000) return "1000";
-  if(v===5000) return "5000";
-  if(v===10000) return "10000";
+/* 베팅 가능/불가 */
+let bettingOpen = true;
+function setBettingOpen(open){
+  bettingOpen = open;
+  document.querySelectorAll(".zone").forEach(z=>{
+    z.classList.toggle("locked", !open);
+  });
+}
+
+/** 칩 UI */
+const chipValues = [1000, 5000, 10000, 30000, 50000, 100000];
+const chipLabel = (v)=>{
   if(v===30000) return "30K";
   if(v===50000) return "50K";
   if(v===100000) return "100K";
   return String(v);
-}
+};
+let selectedChip = 5000;
 
-function updateSelectedChipUI(){
-  document.getElementById("selChipTop").textContent = fmt(selectedChip);
+function chipClass(v){
+  if(v===1000) return "v1000";
+  if(v===5000) return "v5000";
+  if(v===10000) return "v10000";
+  if(v===30000) return "v30000";
+  if(v===50000) return "v50000";
+  return "v100000";
 }
 
 function buildChipRack(){
@@ -899,16 +979,14 @@ function buildChipRack(){
   rack.innerHTML = "";
   chipValues.forEach(v=>{
     const el = document.createElement("div");
-    el.className = "chip" + (v===selectedChip ? " active":"");
+    el.className = "chip " + chipClass(v) + (v===selectedChip ? " active":"");
     el.setAttribute("draggable","true");
     el.dataset.value = v;
-    el.setAttribute("data-v", String(v));
     el.innerHTML = `<span>${chipLabel(v)}</span>`;
 
     el.addEventListener("click", ()=>{
       selectedChip = v;
       [...rack.querySelectorAll(".chip")].forEach(x=>x.classList.toggle("active", x.dataset.value==String(v)));
-      updateSelectedChipUI();
       sfx("chip");
     });
 
@@ -921,36 +999,34 @@ function buildChipRack(){
 
     rack.appendChild(el);
   });
-  updateSelectedChipUI();
 }
 buildChipRack();
-
-function colorForChip(v){
-  if(v===1000) return getComputedStyle(document.documentElement).getPropertyValue("--c1000").trim();
-  if(v===5000) return getComputedStyle(document.documentElement).getPropertyValue("--c5000").trim();
-  if(v===10000) return getComputedStyle(document.documentElement).getPropertyValue("--c10000").trim();
-  if(v===30000) return getComputedStyle(document.documentElement).getPropertyValue("--c30000").trim();
-  if(v===50000) return getComputedStyle(document.documentElement).getPropertyValue("--c50000").trim();
-  if(v===100000) return getComputedStyle(document.documentElement).getPropertyValue("--c100000").trim();
-  return "#fff";
-}
 
 function placeChipVisual(zone, totalAmount){
   const host = document.getElementById("chip"+zone[0].toUpperCase()+zone.slice(1));
   host.innerHTML = "";
   if(totalAmount<=0) return;
-
   const chip = document.createElement("div");
   chip.className = "placedChip";
-  chip.style.background = colorForChip(selectedChip);
-
-  chip.innerHTML = `<span>${(totalAmount>=1000 ? (totalAmount/1000)+"k" : totalAmount)}</span>`;
+  chip.textContent = chipLabel(Math.min(100000, totalAmount)); // 표시만 간단히
+  // 칩 색상은 zone 별이 아니라 “베팅칩 느낌”으로 통일. 원하면 금액 비율로 색 바꿔도 됨.
+  chip.style.background = "radial-gradient(circle at 35% 30%, rgba(255,255,255,.92), rgba(255,255,255,.18) 35%, rgba(0,0,0,.10) 70%), #FFD62E";
   host.appendChild(chip);
 }
 
 function addBet(zone, amount){
-  const totalBefore = bets.player + bets.banker + bets.tie;
-  if(totalBefore + amount > balance){
+  if(!bettingOpen){
+    toast("지금은 베팅할 수 없어요");
+    sfx("lose");
+    return;
+  }
+  if(otherZoneHasBet(zone)){
+    toast("한 번에 한 곳만 베팅 가능");
+    sfx("lose");
+    return;
+  }
+  if(totalBet() + amount > balance){
+    toast("잔액 부족");
     sfx("lose");
     return;
   }
@@ -961,9 +1037,11 @@ function addBet(zone, amount){
   sfx("chip");
 }
 
+/* Zone interaction */
 document.querySelectorAll(".zone").forEach(z=>{
-  z.addEventListener("dragover", (e)=>{ e.preventDefault(); });
+  z.addEventListener("dragover", (e)=>{ if(!bettingOpen) return; e.preventDefault(); });
   z.addEventListener("drop", (e)=>{
+    if(!bettingOpen) return;
     e.preventDefault();
     const zone = z.dataset.zone;
     const v = parseInt(e.dataTransfer.getData("text/plain") || selectedChip, 10);
@@ -975,22 +1053,26 @@ document.querySelectorAll(".zone").forEach(z=>{
 });
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
+  if(!bettingOpen){ toast("플레이 중에는 초기화 불가"); return; }
   bets.player=0; bets.banker=0; bets.tie=0;
-  ["player","banker","tie"].forEach(z=>document.getElementById("chip"+z[0].toUpperCase()+z.slice(1)).innerHTML="");
+  ["player","banker","tie"].forEach(z=>placeChipVisual(z,0));
   betStack.length = 0;
   refreshMoneyUI();
+  toast("베팅 초기화");
 });
 
 document.getElementById("btnUndo").addEventListener("click", ()=>{
+  if(!bettingOpen){ toast("플레이 중에는 되돌리기 불가"); return; }
   const last = betStack.pop();
-  if(!last) return;
+  if(!last){ toast("되돌릴 베팅 없음"); return; }
   bets[last.zone] = Math.max(0, bets[last.zone] - last.amount);
   placeChipVisual(last.zone, bets[last.zone]);
   refreshMoneyUI();
+  toast("되돌림");
 });
 
 /** ===========
- *  Card DOM helpers
+ * Card DOM helpers
  * =========== */
 function cardImgUrl(code){
   const base = new URL("./", window.location.href);
@@ -1000,7 +1082,6 @@ function backImgUrl(){
   const base = new URL("./", window.location.href);
   return new URL("cards/back.png", base).href;
 }
-
 function makeCardElement(code){
   const wrap = document.createElement("div");
   wrap.className = "card3d dealFromShoe";
@@ -1016,13 +1097,12 @@ function makeCardElement(code){
   backImg.src = cardImgUrl(code);
   return wrap;
 }
-
 function clearCards(){
   document.querySelectorAll(".cardSlot").forEach(s=>s.innerHTML="");
 }
 
 /** ===========
- *  Baccarat rules
+ * Baccarat rules
  * =========== */
 function bankerDrawRule(bankerScore, playerThird){
   if(bankerScore<=2) return true;
@@ -1034,93 +1114,68 @@ function bankerDrawRule(bankerScore, playerThird){
 }
 
 /** ===========
- * 로드맵(그림장) (요청 5)
- * - 플레이어: 파란 점(가운데 뚫린)
- * - 뱅커: 빨간 점(가운데 뚫린)
- * - 타이: 초록색 빗금(이전 결과 위에)
- * - 흰색 그리드(2번째 사진 느낌)
+ * Result Banner
  * =========== */
-const roadGrid = document.getElementById("roadGrid");
-const ROAD_COLS = 17; // 가로
-const ROAD_ROWS = 4;  // 세로(짧게)
-let roadIndex = 0;
-let lastDotEl = null;
+const bannerEl = document.getElementById("resultBanner");
+const rbTop = document.getElementById("rbTop");
+const rbLine1 = document.getElementById("rbLine1");
+const rbAmount = document.getElementById("rbAmount");
+const rbSub = document.getElementById("rbSub");
 
-function roadPos(i){
-  const col = i % ROAD_COLS;
-  const row = Math.floor(i / ROAD_COLS) % ROAD_ROWS;
-  const x = col*20 + 4;
-  const y = row*20 + 4;
-  return {x,y};
-}
-function addRoadResult(winner){
-  if(winner==="tie"){
-    if(lastDotEl){
-      const slash = document.createElement("div");
-      slash.className = "tieSlash";
-      lastDotEl.appendChild(slash);
-    }
-    return;
-  }
+function showResultBanner({winner, wonTotal, isWin}){
+  bannerEl.classList.remove("rbP","rbB","rbT","show");
+  let cls="rbT", title="타이";
+  if(winner==="player"){ cls="rbP"; title="플레이어"; }
+  if(winner==="banker"){ cls="rbB"; title="뱅커"; }
+  if(winner==="tie"){ cls="rbT"; title="타이"; }
 
-  const {x,y} = roadPos(roadIndex++);
-  const dot = document.createElement("div");
-  dot.className = "dotCell " + (winner==="player" ? "dotPlayer" : "dotBanker");
-  dot.style.left = x+"px";
-  dot.style.top  = y+"px";
-  roadGrid.appendChild(dot);
-  lastDotEl = dot;
+  bannerEl.classList.add(cls);
+  rbTop.textContent = title;
+  rbLine1.textContent = isWin ? "승리" : "패배";
+  rbAmount.textContent = fmt(wonTotal);
+  rbSub.textContent = isWin ? "획득" : "손실";
 
-  // 너무 많아지면 앞쪽 제거
-  if(roadGrid.children.length > 120){
-    roadGrid.removeChild(roadGrid.firstChild);
-  }
+  bannerEl.classList.add("show");
+  clearTimeout(showResultBanner._t);
+  showResultBanner._t = setTimeout(()=>bannerEl.classList.remove("show"), 4000);
 }
 
 /** ===========
- * Deal flow
- * - 3번째 카드가 나오면 "클릭해야 공개"
- * - 그 전엔 결과/배너 절대 안뜸 (요청 2)
- * - 한 판 끝나면 카드 치움 (요청 유지)
+ * Third card click reveal helper (오버레이 없음)
  * =========== */
-let dealing = false;
-
-async function waitTapToReveal(cardEl){
-  return new Promise((resolve)=>{
-    const slot = cardEl.parentElement;
-    const overlay = document.createElement("div");
-    overlay.className = "tapReveal";
-    overlay.textContent = "클릭해서 공개";
-    slot.appendChild(overlay);
-
+function waitClickReveal(cardEl){
+  return new Promise(resolve=>{
+    cardEl.classList.add("clickReveal");
     const done = ()=>{
-      overlay.remove();
+      cardEl.classList.remove("clickReveal");
+      cardEl.removeEventListener("click", done);
+      cardEl.removeEventListener("touchend", done);
       resolve();
     };
-    overlay.addEventListener("click", done, {once:true});
-    overlay.addEventListener("touchstart", (e)=>{ e.preventDefault(); done(); }, {once:true, passive:false});
+    cardEl.addEventListener("click", done, {once:true});
+    cardEl.addEventListener("touchend", done, {once:true});
   });
 }
+
+let dealing = false;
 
 async function dealRound(){
   if(dealing) return;
 
-  const totalBet = bets.player + bets.banker + bets.tie;
-  if(totalBet<=0){
-    sfx("lose");
-    return;
-  }
-  if(totalBet > balance){
+  const tBet = totalBet();
+  if(tBet<=0){
+    toast("먼저 베팅해");
     sfx("lose");
     return;
   }
 
+  // 플레이 시작: 베팅 잠금
   dealing = true;
+  setBettingOpen(false);
 
-  // 이전 배너 끄기
-  document.getElementById("resultBanner").classList.remove("show");
+  // 버튼 잠금
+  document.getElementById("btnDeal").disabled = true;
 
-  // 카드 치우고 시작
   clearCards();
 
   let player=[drawFromShoe(), drawFromShoe()];
@@ -1140,115 +1195,102 @@ async function dealRound(){
   await sleep(220);
   const bEls = [mount(bSlots[0], banker[0].code), mount(bSlots[1], banker[1].code)];
 
-  // 2초 후 4장 오픈
-  await sleep(2000);
+  // 첫 4장은 자동 공개
+  await sleep(1000);
   for(const el of [...pEls, ...bEls]){
     el.classList.add("revealed");
     sfx("flip");
-    await sleep(220);
+    await sleep(180);
   }
 
   let pScore = handScore(player);
   let bScore = handScore(banker);
 
+  // naturals
   let playerThird=null;
-  let bankerThird=null;
+  let p3El=null, b3El=null;
 
   if(!(pScore>=8 || bScore>=8)){
+    // player third
     if(pScore<=5){
       playerThird = drawFromShoe();
       player.push(playerThird);
-      const el = mount(pSlots[2], playerThird.code);
+      p3El = mount(pSlots[2], playerThird.code);
 
-      // ✅ 3번째 카드: 클릭해야 공개
-      await sleep(350);
-      await waitTapToReveal(el);
-      el.classList.add("revealed");
+      // ✅ 3번째 카드: 클릭해야 공개 (오버레이 없음)
+      await waitClickReveal(p3El);
+      p3El.classList.add("revealed");
       sfx("flip");
       pScore = handScore(player);
+      await sleep(150);
     }
 
+    // banker third
     if(bankerDrawRule(bScore, playerThird)){
-      bankerThird = drawFromShoe();
-      banker.push(bankerThird);
-      const el = mount(bSlots[2], bankerThird.code);
+      const b3 = drawFromShoe();
+      banker.push(b3);
+      b3El = mount(bSlots[2], b3.code);
 
-      // ✅ 뱅커 3번째도 클릭 오픈
-      await sleep(350);
-      await waitTapToReveal(el);
-      el.classList.add("revealed");
+      // ✅ 뱅커 3번째도 클릭 공개
+      await waitClickReveal(b3El);
+      b3El.classList.add("revealed");
       sfx("flip");
       bScore = handScore(banker);
+      await sleep(150);
     }
   }
 
-  // ✅ 여기서부터만 결과 계산/배너 가능 (요청 2 완전 반영)
+  // ✅ 여기서부터 결과 계산/배너 가능 (3번째 카드가 있었다면 클릭 공개 이후)
   let winner="tie";
   if(pScore>bScore) winner="player";
   else if(pScore<bScore) winner="banker";
 
-  // payouts (delta = 순손익)
-  let delta = 0;
+  // ✅ “한 쪽만 베팅” 규칙이므로, 베팅한 존을 찾음
+  const betZone = bets.player>0 ? "player" : (bets.banker>0 ? "banker" : "tie");
+  const betAmt = bets[betZone];
+
+  // profit 계산
+  let profit = 0;
   if(winner==="player"){
-    delta += bets.player * 1;
-    delta -= bets.banker;
-    delta -= bets.tie;
+    profit = betZone==="player" ? betAmt * 1 : -betAmt;
   }else if(winner==="banker"){
-    delta += Math.floor(bets.banker * 0.95);
-    delta -= bets.player;
-    delta -= bets.tie;
+    profit = betZone==="banker" ? Math.floor(betAmt * 0.95) : -betAmt;
   }else{
-    delta += bets.tie * 8;
-    delta -= bets.player;
-    delta -= bets.banker;
+    profit = betZone==="tie" ? betAmt * 8 : -betAmt;
   }
 
-  balance += delta;
+  // 실제 밸런스 반영: 기존 로직 유지(베팅 시 차감 안 했으니 profit만 반영)
+  balance += profit;
+
+  // 승리 표시 금액(원금+이익) 요청 반영
+  const isWin = (profit > 0);
+  const wonTotal = isWin ? (betAmt + profit) : Math.abs(profit);
+
+  lastWin = isWin ? wonTotal : 0;
   refreshMoneyUI();
 
-  // ✅ 승리 시 표기: "원금+이익" (예: 10,000 걸고 이기면 20,000)
-  const winText = ()=>{
-    if(winner==="player"){
-      const gain = bets.player + bets.player; // 원금+이익(1:1)
-      return `₩${fmt(gain)}`;
-    }
-    if(winner==="banker"){
-      // 뱅커는 0.95 수수료라 "원금+이익"을 현실적으로 계산
-      const profit = Math.floor(bets.banker * 0.95);
-      const gain = bets.banker + profit;
-      return `₩${fmt(gain)}`;
-    }
-    // 타이 8:1 => 원금 + 8배 이익
-    const gain = bets.tie + (bets.tie*8);
-    return `₩${fmt(gain)}`;
-  };
+  // 로드맵 기록
+  pushRoad(winner);
 
-  const loseText = ()=> `₩${fmt(delta)}`; // 음수로 표시
+  // 결과 배너 (3번째 카드 뜨는 중엔 금지 -> 위에서 해결됨)
+  showResultBanner({ winner, wonTotal, isWin });
+  if(isWin) sfx("win"); else sfx("lose");
 
-  if(delta>=0){
-    sfx("win");
-    showResultBanner({ winner, moneyText: winText() });
-  }else{
-    sfx("lose");
-    showResultBanner({ winner, moneyText: loseText() });
-  }
-
-  // ✅ 로드맵 반영
-  addRoadResult(winner);
-
-  // bets clear
+  // 라운드 종료: 베팅/칩 초기화
   bets.player=0; bets.banker=0; bets.tie=0;
   betStack.length = 0;
-  ["player","banker","tie"].forEach(z=>document.getElementById("chip"+z[0].toUpperCase()+z.slice(1)).innerHTML="");
+  ["player","banker","tie"].forEach(z=>placeChipVisual(z,0));
   refreshMoneyUI();
 
   maybeReshuffle();
 
-  // ✅ 한 판 끝나면 카드 치움(조금 보여주고)
-  await sleep(1400);
+  // ✅ 한 판 끝나면 카드 치우기 (배너 4초 뒤 + 약간 여유)
+  await sleep(4200);
   clearCards();
 
   dealing = false;
+  setBettingOpen(true);
+  document.getElementById("btnDeal").disabled = false;
 }
 
 document.getElementById("btnDeal").addEventListener("click", ()=>{
@@ -1257,7 +1299,7 @@ document.getElementById("btnDeal").addEventListener("click", ()=>{
 });
 window.addEventListener("pointerdown", ensureAudio, {once:true});
 
-/** ===== 상단 버튼 ===== */
+/** Home / Logout */
 document.getElementById("btnHome").addEventListener("click", ()=> location.href = "./home.html");
 </script>
 
@@ -1285,11 +1327,8 @@ onAuthStateChanged(auth, (user) => {
 });
 
 document.getElementById("btnLogout")?.addEventListener("click", async ()=>{
-  try{
-    await signOut(auth);
-  }finally{
-    window.location.replace("https://acevaca.github.io/login-site/");
-  }
+  try{ await signOut(auth); }
+  finally{ window.location.replace("https://acevaca.github.io/login-site/"); }
 });
 </script>
 </body>
