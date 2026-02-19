@@ -1,462 +1,87 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ACE 바카라 - 로그인</title>
-  <meta name="theme-color" content="#0b0d12" />
-  <style>
-    :root{
-      --bg:#07080b;
-      --panel: rgba(15, 17, 23, .62);
-      --panel2: rgba(10, 11, 15, .72);
-      --gold1:#ffdf8a;
-      --gold2:#c89b2a;
-      --gold3:#8b6b1f;
-      --text:#f5f6f7;
-      --muted: rgba(245,246,247,.7);
-      --line: rgba(255, 220, 140, .25);
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 700px at 65% 35%, rgba(255,205,90,.12), transparent 60%),
-                  radial-gradient(900px 600px at 25% 70%, rgba(255,90,90,.08), transparent 55%),
-                  linear-gradient(180deg, #06070a, #0b0d12 55%, #05060a);
-      overflow-x:hidden;
-    }
-
-    /* subtle casino bokeh */
-    .bokeh{
-      position:fixed; inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(255,215,120,.12), transparent 18%),
-        radial-gradient(circle at 80% 22%, rgba(255,120,120,.10), transparent 20%),
-        radial-gradient(circle at 30% 75%, rgba(120,200,255,.08), transparent 22%),
-        radial-gradient(circle at 70% 78%, rgba(255,215,120,.10), transparent 25%);
-      filter: blur(1px);
-      opacity:.9;
-    }
-
-    .wrap{
-      min-height:100%;
-      display:grid;
-      place-items:center;
-      padding: 28px 16px;
-    }
-
-    .frame{
-      width:min(980px, 100%);
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 18px;
-      align-items:stretch;
-    }
-
-    /* left promo (image 느낌) */
-    .hero{
-      position:relative;
-      border-radius: 22px;
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      background:
-        linear-gradient(120deg, rgba(255,215,120,.18), rgba(255,215,120,0) 55%),
-        radial-gradient(900px 500px at 20% 60%, rgba(255,110,110,.20), transparent 60%),
-        radial-gradient(800px 600px at 70% 30%, rgba(255,215,120,.16), transparent 55%),
-        linear-gradient(180deg, rgba(20,22,30,.85), rgba(10,12,18,.88));
-      border: 1px solid rgba(255, 220, 140, .18);
-    }
-
-    .hero::after{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(120px 120px at 82% 18%, rgba(255,230,160,.35), transparent 60%),
-                  radial-gradient(160px 160px at 22% 72%, rgba(255,110,110,.25), transparent 65%);
-      opacity:.75;
-      pointer-events:none;
-    }
-
-    .heroInner{
-      position:relative;
-      height:100%;
-      padding: 26px 22px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap: 18px;
-    }
-
-    .brand{
-      display:flex; align-items:center; gap: 12px;
-    }
-    .spade{
-      width:46px; height:46px;
-      border-radius: 14px;
-      display:grid; place-items:center;
-      background: linear-gradient(180deg, rgba(255,215,120,.22), rgba(255,215,120,.06));
-      border: 1px solid rgba(255,220,140,.24);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    .spade svg{filter: drop-shadow(0 10px 12px rgba(0,0,0,.4));}
-    .title{
-      margin:0;
-      font-size: 40px;
-      letter-spacing: .5px;
-      line-height:1.1;
-      background: linear-gradient(180deg, #fff2c6, #ffd36a 30%, #cfa02b);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-      text-shadow: 0 10px 40px rgba(255,200,70,.10);
-    }
-    .subtitle{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .chipsRow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      opacity:.92;
-    }
-    .chip{
-      width: 46px; height:46px;
-      border-radius: 50%;
-      display:grid; place-items:center;
-      border: 2px solid rgba(255,220,140,.35);
-      background: radial-gradient(circle at 35% 30%, rgba(255,240,200,.30), rgba(255,215,120,.05) 55%, rgba(10,12,18,.85));
-      box-shadow: 0 14px 30px rgba(0,0,0,.35);
-      color: rgba(255,240,210,.92);
-      font-weight: 700;
-      font-size: 12px;
-    }
-    .heroNote{
-      color: rgba(245,246,247,.75);
-      font-size: 13px;
-      line-height: 1.55;
-      max-width: 42ch;
-    }
-
-    /* right login panel */
-    .panel{
-      border-radius: 22px;
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      background: linear-gradient(180deg, rgba(16,18,24,.72), rgba(10,11,16,.82));
-      border: 1px solid rgba(255, 220, 140, .18);
-      position:relative;
-    }
-    .panel::before{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(500px 280px at 40% 10%, rgba(255,215,120,.14), transparent 60%);
-      pointer-events:none;
-    }
-    .panelInner{
-      position:relative;
-      padding: 26px 22px;
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-    }
-
-    .panelHead{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-    .panelHead h2{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: .2px;
-      color: rgba(255,240,200,.95);
-    }
-    .badge{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,220,140,.25);
-      background: rgba(255,215,120,.08);
-      color: rgba(255,240,210,.9);
-    }
-
-    label{
-      display:block;
-      font-size: 12px;
-      color: rgba(255,240,210,.85);
-      margin: 12px 0 6px;
-      letter-spacing:.25px;
-    }
-    .input{
-      width:100%;
-      height: 48px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 220, 140, .22);
-      background: rgba(0,0,0,.26);
-      color: var(--text);
-      padding: 0 14px;
-      outline:none;
-      transition: .2s;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.18);
-    }
-    .input:focus{
-      border-color: rgba(255,220,140,.45);
-      box-shadow: 0 0 0 3px rgba(255,215,120,.12);
-    }
-
-    .row{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      margin-top: 10px;
-    }
-
-    .btn{
-      width:100%;
-      height: 50px;
-      border-radius: 14px;
-      border: 0;
-      cursor:pointer;
-      font-weight: 800;
-      letter-spacing:.3px;
-      font-size: 15px;
-      color: #1a1203;
-      background: linear-gradient(180deg, #ffe6a7, #ffcf5a 40%, #c8921e);
-      box-shadow: 0 18px 45px rgba(255,190,70,.16), 0 14px 28px rgba(0,0,0,.35);
-      transition: transform .08s ease, filter .2s ease;
-      user-select:none;
-    }
-    .btn:active{ transform: translateY(1px); }
-    .btn.secondary{
-      background: rgba(255,215,120,.10);
-      color: rgba(255,240,210,.95);
-      border: 1px solid rgba(255,220,140,.25);
-      box-shadow: none;
-      font-weight: 700;
-    }
-
-    .links{
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-    }
-    .link{
-      color: rgba(255,230,180,.9);
-      text-decoration:none;
-      font-size: 13px;
-      opacity:.9;
-    }
-    .link:hover{ text-decoration:underline; }
-
-    .msg{
-      min-height: 18px;
-      font-size: 13px;
-      color: rgba(255,170,110,.95);
-      margin-top: 2px;
-    }
-    .msg.ok{ color: rgba(140,255,190,.95); }
-
-    .foot{
-      margin-top:auto;
-      padding-top: 12px;
-      font-size: 12px;
-      color: rgba(245,246,247,.55);
-      border-top: 1px solid rgba(255,220,140,.12);
-    }
-
-    /* responsive */
-    @media (max-width: 860px){
-      .frame{ grid-template-columns: 1fr; }
-      .hero{ display:none; }
-      .panelInner{ padding: 24px 18px; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACE 바카라 - Evolution 2D 스타일</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#8a6d58;color:#fff;overflow:hidden}
+.table{position:absolute;inset:0;background:linear-gradient(#8a6d58,#7b5f4d)}
+.center{position:absolute;top:25%;left:0;right:0;display:flex;justify-content:center;gap:200px}
+.title{font-size:60px;font-weight:900;opacity:.8;font-family:serif}
+.cards{position:absolute;top:40%;left:0;right:0;display:flex;justify-content:center;gap:220px}
+.hand{display:flex;gap:12px}
+.card{width:60px;height:85px;background:#fff;border-radius:8px;color:#000;
+display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
+.bottom{position:absolute;bottom:0;left:0;right:0;background:#111;padding:15px;display:flex;justify-content:center;gap:20px}
+.zone{padding:15px 25px;border-radius:20px;font-weight:900;cursor:pointer}
+.player{background:#2f6cff}
+.tie{background:#0f8f62}
+.banker{background:#e04848}
+</style>
 </head>
-
 <body>
-  <div class="bokeh"></div>
+<div class="table"></div>
 
-  <main class="wrap">
-    <section class="frame">
+<div class="center">
+  <div class="title">PLAYER</div>
+  <div class="title">BANKER</div>
+</div>
 
-      <aside class="hero" aria-hidden="true">
-        <div class="heroInner">
-          <div>
-            <div class="brand">
-              <div class="spade" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.5 5.2 5 8.2 5 12a5 5 0 0 0 9 3.1V19H10v2h4v-2h-4v-3.9A5 5 0 0 0 19 12c0-3.8-3.5-6.8-7-10Z"
-                        fill="#ffcf5a"/>
-                </svg>
-              </div>
-              <div>
-                <h1 class="title">ACE 바카라</h1>
-                <p class="subtitle">로그인 후 게임으로 자동 이동합니다</p>
-              </div>
-            </div>
+<div class="cards">
+  <div class="hand" id="player"></div>
+  <div class="hand" id="banker"></div>
+</div>
 
-            <p class="heroNote" style="margin-top:14px;">
-              금빛 테이블 위에서 한 판.  
-              모바일에서도 깔끔하게 동작하도록 제작 중.
-            </p>
-          </div>
+<div class="bottom">
+  <div class="zone player" onclick="bet('P')">플레이어</div>
+  <div class="zone tie" onclick="bet('T')">무</div>
+  <div class="zone banker" onclick="bet('B')">뱅커</div>
+  <div class="zone" style="background:#444" onclick="deal()">딜</div>
+</div>
 
-          <div class="chipsRow">
-            <div class="chip">10</div>
-            <div class="chip">50</div>
-            <div class="chip">100</div>
-            <div class="chip">500</div>
-            <div class="chip">1K</div>
-          </div>
-        </div>
-      </aside>
-
-      <section class="panel">
-        <div class="panelInner">
-          <div class="panelHead">
-            <h2>로그인</h2>
-            <span class="badge">Secure</span>
-          </div>
-
-          <div class="msg" id="msg"></div>
-
-          <label for="email">USERNAME (Email)</label>
-          <input class="input" id="email" type="email" autocomplete="username" placeholder="example@email.com" />
-
-          <label for="pw">PASSWORD</label>
-          <input class="input" id="pw" type="password" autocomplete="current-password" placeholder="••••••••" />
-
-          <div class="row">
-            <button class="btn" id="btnLogin">LOGIN</button>
-          </div>
-
-          <div class="row">
-            <button class="btn secondary" id="btnSignup">SIGN UP</button>
-          </div>
-
-          <div class="links">
-            <a class="link" href="signup.html">회원가입 페이지로</a>
-            <a class="link" href="#" id="btnReset">비밀번호 재설정</a>
-          </div>
-
-          <div class="foot">
-            © ACE Baccarat • 로그인 성공 시 <b>home.html</b>로 이동
-          </div>
-        </div>
-      </section>
-
-    </section>
-  </main>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
-      authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
-      projectId: "ace-baccarat-dfa2e",
-      storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
-      messagingSenderId: "609825096693",
-      appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
-      measurementId: "G-LRW1E07P1J"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const $ = (id) => document.getElementById(id);
-    const msg = (text, ok=false) => {
-      const el = $("msg");
-      el.textContent = text || "";
-      el.className = "msg" + (ok ? " ok" : "");
-    };
-
-    // 이미 로그인 돼 있으면 바로 home.html로
-    onAuthStateChanged(auth, (user) => {
-      if (user) location.href = "home.html";
-    });
-
-    async function doLogin() {
-      msg("");
-      const email = $("email").value.trim();
-      const pw = $("pw").value;
-
-      if (!email || !pw) return msg("이메일/비밀번호를 입력하세요.");
-      try {
-        $("btnLogin").disabled = true;
-        $("btnLogin").textContent = "LOGGING IN...";
-        await signInWithEmailAndPassword(auth, email, pw);
-        msg("로그인 성공! 이동 중...", true);
-        location.href = "home.html";
-      } catch (e) {
-        msg("로그인 실패: " + (e?.message || e));
-      } finally {
-        $("btnLogin").disabled = false;
-        $("btnLogin").textContent = "LOGIN";
+<script>
+let shoe=[];
+const suits=["♦","♥","♣","♠"];
+const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+function newShoe(){
+  shoe=[];
+  for(let d=0;d<6;d++){
+    for(let s of suits){
+      for(let r of ranks){
+        shoe.push(r+s);
       }
     }
+  }
+  shoe.sort(()=>Math.random()-0.5);
+}
+newShoe();
 
-    async function quickSignup() {
-      msg("");
-      const email = $("email").value.trim();
-      const pw = $("pw").value;
+function draw(){
+  if(shoe.length<10)newShoe();
+  return shoe.pop();
+}
 
-      if (!email || !pw) return msg("회원가입도 이메일/비밀번호가 필요해요.");
-      if (pw.length < 6) return msg("비밀번호는 6자 이상이어야 해요.");
+function deal(){
+  document.getElementById("player").innerHTML="";
+  document.getElementById("banker").innerHTML="";
+  let p1=draw(),p2=draw(),b1=draw(),b2=draw();
+  addCard("player",p1);
+  addCard("player",p2);
+  addCard("banker",b1);
+  addCard("banker",b2);
+}
 
-      try {
-        $("btnSignup").disabled = true;
-        $("btnSignup").textContent = "CREATING...";
-        await createUserWithEmailAndPassword(auth, email, pw);
-        msg("회원가입 완료! 이동 중...", true);
-        location.href = "home.html";
-      } catch (e) {
-        msg("회원가입 실패: " + (e?.message || e));
-      } finally {
-        $("btnSignup").disabled = false;
-        $("btnSignup").textContent = "SIGN UP";
-      }
-    }
+function addCard(id,txt){
+  let c=document.createElement("div");
+  c.className="card";
+  c.textContent=txt;
+  document.getElementById(id).appendChild(c);
+}
 
-    async function resetPw() {
-      msg("");
-      const email = $("email").value.trim();
-      if (!email) return msg("비밀번호 재설정은 이메일을 먼저 입력해야 해요.");
-      try{
-        await sendPasswordResetEmail(auth, email);
-        msg("재설정 이메일을 보냈어요. 메일함 확인!", true);
-      }catch(e){
-        msg("재설정 실패: " + (e?.message || e));
-      }
-    }
-
-    $("btnLogin").addEventListener("click", doLogin);
-    $("btnSignup").addEventListener("click", quickSignup);
-    $("btnReset").addEventListener("click", (e)=>{ e.preventDefault(); resetPw(); });
-
-    // Enter 키로 로그인
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") doLogin();
-    });
-  </script>
+function bet(x){
+  alert(x+" 베팅");
+}
+</script>
 </body>
 </html>
