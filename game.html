@@ -1206,59 +1206,50 @@ function roadPush(winner){
   const grid = document.getElementById("roadGrid");
   if(!grid) return;
 
-  // state kept on window
-  const st = window.__roadState || { col:0, row:0, lastCell:null };
   const ROWS = 6;
   const COLS = 27;
 
-  function cellIndex(col,row){ return row*COLS + col; }
+  // keep state on window so it persists across rounds
+  const st = window.__roadState || { col:0, row:0, lastWinner:null };
 
   function placeDot(col,row, cls){
-    if(col<0 || col>=COLS || row<0 || row>=ROWS) return null;
+    if(col<0 || col>=COLS || row<0 || row>=ROWS) return;
     const dot = document.createElement("div");
     dot.className = "dotRes " + cls;
     dot.style.gridColumn = String(col+1);
     dot.style.gridRow = String(row+1);
     grid.appendChild(dot);
-    st.lastCell = dot;
-    return dot;
   }
 
-  if(winner==="tie"){
-    const last = st.lastCell;
-    if(last){
-      if(!last.querySelector(".tieSlash")){
-        const slash = document.createElement("div");
-        slash.className = "tieSlash";
-        last.appendChild(slash);
-      }
-    }
-    window.__roadState = st;
-    return;
-  }
-
-  // advance row/col
-  if(st.row >= ROWS){
-    st.row = 0;
+  // new shoe / reset handling: if winner changes, go to next column top
+  if(st.lastWinner !== null && winner !== st.lastWinner){
     st.col += 1;
+    st.row = 0;
   }
+
+  // if row overflow, move to next column
+  if(st.row >= ROWS){
+    st.col += 1;
+    st.row = ROWS - 1;
+  }
+
+  // if col overflow, shift everything left by 1 column (keep last columns visible)
   if(st.col >= COLS){
-    // shift left by 1 column when overflow
     const children = [...grid.children];
     children.forEach(el=>{
       const gc = parseInt(el.style.gridColumn || "1", 10) - 1;
       if(gc <= 1){
         el.remove();
       }else{
-        el.style.gridColumn = String(gc - 1);
+        el.style.gridColumn = String(gc);
       }
-
+    });
     st.col = COLS - 1;
   }
 
   placeDot(st.col, st.row, winner==="player" ? "dotP" : "dotB");
   st.row += 1;
-
+  st.lastWinner = winner;
   window.__roadState = st;
 }
 /** ===========
