@@ -1,49 +1,121 @@
 <!doctype html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="utf-8">
-<title>회원가입</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>회원가입</title>
+  <link rel="stylesheet" href="./assets/app.css" />
 </head>
+
 <body>
+  <div class="page">
+    <div class="card">
+      <div class="brand">
+        <div class="logo"></div>
+        <h1>회원가입</h1>
+        <p class="sub">이메일과 비밀번호로 계정을 생성하세요.</p>
+      </div>
 
-<h2>회원가입</h2>
+      <form id="signupForm" autocomplete="on">
+        <label class="field">
+          <span>이메일</span>
+          <div class="inputWrap">
+            <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+        </label>
 
-<input id="email" placeholder="이메일"><br><br>
-<input id="pw" type="password" placeholder="비밀번호"><br><br>
+        <label class="field">
+          <span>비밀번호</span>
+          <div class="inputWrap">
+            <input id="pw" type="password" placeholder="••••••••" autocomplete="new-password" required />
+            <button class="iconBtn" type="button" id="togglePw" aria-label="비밀번호 보기/숨기기">👁</button>
+          </div>
+        </label>
 
-<button onclick="signup()">가입하기</button>
+        <button class="btn" id="submitBtn" type="submit">
+          <span class="spinner"></span>
+          <span id="btnText">가입하기</span>
+        </button>
 
-<p id="msg"></p>
+        <p class="msg" id="msg"></p>
+      </form>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+      <div class="footer">
+        <a class="link" href="./index.html">이미 계정이 있어요 → 로그인</a>
+      </div>
+    </div>
+  </div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
-  authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
-  projectId: "ace-baccarat-dfa2e",
-  storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
-  messagingSenderId: "609825096693",
-  appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
-  measurementId: "G-LRW1E07P1J"
-};
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
+      authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
+      projectId: "ace-baccarat-dfa2e",
+      storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
+      messagingSenderId: "609825096693",
+      appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
+      measurementId: "G-LRW1E07P1J"
+    };
 
-window.signup = async function(){
-  const email = document.getElementById("email").value;
-  const pw = document.getElementById("pw").value;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  try{
-    await createUserWithEmailAndPassword(auth,email,pw);
-    alert("회원가입 성공!");
-  }catch(e){
-    alert(e.message);
-  }
-}
-</script>
+    const $ = (id) => document.getElementById(id);
+    const form = $("signupForm");
+    const msg = $("msg");
+    const btn = $("submitBtn");
+    const btnText = $("btnText");
+    const emailEl = $("email");
+    const pwEl = $("pw");
 
+    $("togglePw").addEventListener("click", () => {
+      pwEl.type = (pwEl.type === "password") ? "text" : "password";
+    });
+
+    function setMessage(text, type){
+      msg.textContent = text || "";
+      msg.classList.remove("err","ok");
+      if(type) msg.classList.add(type);
+    }
+
+    function friendlyError(e){
+      const code = e?.code || "";
+      if (code.includes("auth/invalid-email")) return "이메일 형식이 올바르지 않아요.";
+      if (code.includes("auth/email-already-in-use")) return "이미 사용 중인 이메일이에요.";
+      if (code.includes("auth/weak-password")) return "비밀번호가 너무 약해요. 더 길게/강하게 설정해 주세요.";
+      return "회원가입에 실패했어요. 다시 시도해 주세요.";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = emailEl.value.trim();
+      const pw = pwEl.value;
+
+      setMessage("계정 생성 중...", "");
+      btn.disabled = true;
+      btn.classList.add("loading");
+      btnText.textContent = "처리 중...";
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, pw);
+        setMessage("회원가입 성공! 로그인 페이지로 이동할게요.", "ok");
+        setTimeout(() => location.href = "./index.html", 600);
+      } catch (err) {
+        setMessage(friendlyError(err), "err");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove("loading");
+        btnText.textContent = "가입하기";
+      }
+    });
+  </script>
 </body>
 </html>
