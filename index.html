@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>로그인</title>
 
   <style>
@@ -18,24 +18,28 @@
       --ok:#34d399;
     }
 
-    *{ box-sizing:border-box; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
-    body{ margin:0; color:var(--text); }
-
-    /* ✅ 배경: 선명하게 (어두운 덮개 제거) */
-    .page{
-      min-height:100dvh;
-      display:grid;
-      place-items:center;
-      padding:24px;
-      background: url("./assets/login-bg.png") center/cover no-repeat;
-      /* iOS에서 fixed는 종종 깨져서 아예 안 씀 */
-      overflow:hidden;
+    *{
+      box-sizing:border-box;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     }
 
-    /* ✅ 중앙 카드 (블러 제거해서 배경 흐려지지 않게) */
+    body{
+      margin:0;
+      color:var(--text);
+      background: url("./assets/login-bg.png") center/cover no-repeat fixed;
+    }
+
+    .page{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
     .card{
-      width:min(420px, 100%);
-      padding:28px;
+      width:420px;
+      padding:32px;
       border-radius:22px;
       background: var(--card);
       border: 1px solid rgba(255,255,255,.10);
@@ -43,14 +47,14 @@
     }
 
     h1{
-      margin:0 0 18px 0;
+      margin:0 0 22px 0;
       text-align:center;
       font-size:24px;
       letter-spacing:.5px;
-      text-shadow: 0 8px 24px rgba(0,0,0,.55);
     }
 
-    .field{ margin-top:14px; }
+    .field{ margin-top:16px; }
+
     .field label{
       display:block;
       font-size:13px;
@@ -58,10 +62,9 @@
       margin-bottom:8px;
     }
 
-    .inputWrap{ position:relative; }
     input{
       width:100%;
-      padding:12px 44px 12px 12px;
+      padding:12px;
       border-radius:14px;
       border:1px solid var(--line);
       background: rgba(255,255,255,.08);
@@ -69,32 +72,24 @@
       outline:none;
       transition:.18s ease;
     }
-    input::placeholder{ color: rgba(209,213,219,.75); }
+
+    input::placeholder{
+      color: rgba(209,213,219,.75);
+    }
+
     input:focus{
       border-color: rgba(246,211,101,.65);
       box-shadow: 0 0 0 4px rgba(246,211,101,.14);
     }
 
-    .iconBtn{
-      position:absolute;
-      right:8px;
-      top:50%;
-      transform:translateY(-50%);
-      width:32px;
-      height:32px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.10);
-      color: var(--text);
-      cursor:pointer;
-    }
-
+    /* ✅ 로그인 유지 가로 고정 */
     .row{
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:12px;
-      margin:14px 0 16px;
+      margin:16px 0 20px;
+      flex-wrap:nowrap;
     }
 
     .check{
@@ -103,6 +98,14 @@
       gap:8px;
       font-size:13px;
       color: var(--muted);
+      white-space:nowrap;
+    }
+
+    .check input{
+      width:16px;
+      height:16px;
+      margin:0;
+      flex:0 0 auto;
     }
 
     .link{
@@ -110,7 +113,10 @@
       text-decoration:none;
       font-size:13px;
     }
-    .link:hover{ text-decoration:underline; }
+
+    .link:hover{
+      text-decoration:underline;
+    }
 
     .btn{
       width:100%;
@@ -122,46 +128,32 @@
       background: linear-gradient(135deg, var(--gold1), var(--gold2));
       cursor:pointer;
       transition: transform .08s ease, filter .18s ease;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
     }
-    .btn:hover{ filter:brightness(1.04); }
-    .btn:active{ transform: translateY(1px); }
-    .btn[disabled]{ opacity:.75; cursor:not-allowed; }
 
-    .spinner{
-      width:16px;height:16px;border-radius:999px;
-      border:2px solid rgba(26,18,0,.25);
-      border-top-color: rgba(26,18,0,.95);
-      animation: spin .8s linear infinite;
-      display:none;
+    .btn:hover{
+      filter:brightness(1.05);
     }
-    .btn.loading .spinner{ display:inline-block; }
-    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    .btn:active{
+      transform: translateY(1px);
+    }
 
     .msg{
-      margin-top:12px;
+      margin-top:14px;
       min-height:18px;
       font-size:13px;
       text-align:center;
       color: var(--muted);
     }
+
     .msg.err{ color: var(--danger); }
     .msg.ok{ color: var(--ok); }
 
     .footer{
-      margin-top:16px;
+      margin-top:18px;
       text-align:center;
       font-size:13px;
       color: var(--muted);
-    }
-
-    /* 모바일에서 카드 너무 커 보이면 살짝 줄이기 */
-    @media (max-width: 420px){
-      .card{ padding:22px; border-radius:18px; }
-      h1{ font-size:22px; }
     }
   </style>
 </head>
@@ -172,19 +164,15 @@
       <h1>로그인</h1>
 
       <form id="loginForm" autocomplete="on">
+
         <div class="field">
           <label for="email">이메일</label>
-          <div class="inputWrap">
-            <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-          </div>
+          <input id="email" type="email" placeholder="you@example.com" required />
         </div>
 
         <div class="field">
           <label for="pw">비밀번호</label>
-          <div class="inputWrap">
-            <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password" required />
-            <button class="iconBtn" type="button" id="togglePw" aria-label="비밀번호 보기/숨기기">👁</button>
-          </div>
+          <input id="pw" type="password" placeholder="••••••••" required />
         </div>
 
         <div class="row">
@@ -195,96 +183,68 @@
           <a class="link" href="./signup.html">회원가입</a>
         </div>
 
-        <button class="btn" id="submitBtn" type="submit">
-          <span class="spinner"></span>
-          <span id="btnText">로그인</span>
-        </button>
+        <button class="btn" type="submit">로그인</button>
 
         <p class="msg" id="msg"></p>
       </form>
 
       <div class="footer">
-        <span>계정이 없나요?</span> <a class="link" href="./signup.html">회원가입</a>
+        계정이 없나요? <a class="link" href="./signup.html">회원가입</a>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth,
-      signInWithEmailAndPassword,
-      setPersistence,
-      browserLocalPersistence,
-      browserSessionPersistence
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
-      authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
-      projectId: "ace-baccarat-dfa2e",
-      storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
-      messagingSenderId: "609825096693",
-      appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
-      measurementId: "G-LRW1E07P1J"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
+  authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
+  projectId: "ace-baccarat-dfa2e",
+  storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
+  messagingSenderId: "609825096693",
+  appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
+  measurementId: "G-LRW1E07P1J"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    const $ = (id) => document.getElementById(id);
-    const form = $("loginForm");
-    const msg = $("msg");
-    const btn = $("submitBtn");
-    const btnText = $("btnText");
-    const emailEl = $("email");
-    const pwEl = $("pw");
-    const rememberEl = $("remember");
+const form = document.getElementById("loginForm");
+const msg = document.getElementById("msg");
 
-    $("togglePw").addEventListener("click", () => {
-      pwEl.type = (pwEl.type === "password") ? "text" : "password";
-    });
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    function setMessage(text, type){
-      msg.textContent = text || "";
-      msg.classList.remove("err","ok");
-      if(type) msg.classList.add(type);
-    }
+  const email = document.getElementById("email").value.trim();
+  const pw = document.getElementById("pw").value;
+  const remember = document.getElementById("remember").checked;
 
-    function friendlyError(e){
-      const code = e?.code || "";
-      if (code.includes("auth/invalid-email")) return "이메일 형식이 올바르지 않아요.";
-      if (code.includes("auth/missing-password")) return "비밀번호를 입력해 주세요.";
-      if (code.includes("auth/invalid-credential")) return "이메일 또는 비밀번호가 올바르지 않아요.";
-      if (code.includes("auth/too-many-requests")) return "시도가 너무 많아요. 잠시 후 다시 시도해 주세요.";
-      return "로그인에 실패했어요. 다시 시도해 주세요.";
-    }
+  msg.textContent = "로그인 중...";
+  msg.className = "msg";
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  try {
+    await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    await signInWithEmailAndPassword(auth, email, pw);
 
-      const email = emailEl.value.trim();
-      const pw = pwEl.value;
+    msg.textContent = "로그인 성공! 이동 중...";
+    msg.classList.add("ok");
 
-      setMessage("로그인 중...", "");
-      btn.disabled = true;
-      btn.classList.add("loading");
-      btnText.textContent = "로그인 중...";
+    location.href = "./home.html";
 
-      try {
-        await setPersistence(auth, rememberEl.checked ? browserLocalPersistence : browserSessionPersistence);
-        await signInWithEmailAndPassword(auth, email, pw);
-        setMessage("로그인 성공! 이동 중...", "ok");
-        location.href = "./home.html";
-      } catch (err) {
-        setMessage(friendlyError(err), "err");
-        console.error(err);
-      } finally {
-        btn.disabled = false;
-        btn.classList.remove("loading");
-        btnText.textContent = "로그인";
-      }
-    });
-  </script>
+  } catch (e) {
+    msg.textContent = "이메일 또는 비밀번호가 올바르지 않습니다.";
+    msg.classList.add("err");
+  }
+});
+</script>
+
 </body>
 </html>
