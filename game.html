@@ -241,7 +241,7 @@
       position:absolute;
       left:50%;
       top:56%;
-      transform:translate(-50%,-50%);
+      transform:translateX(-50%);
       width:88%;
       height:150px;
       display:flex;
@@ -322,7 +322,7 @@
       width:min(1160px, 96%);
       height:var(--hudH);
       display:grid;
-      grid-template-columns: 320px 1fr 310px;
+      grid-template-columns: 320px 1fr;
       gap:12px;
       z-index:15;
       align-items:end;
@@ -499,24 +499,9 @@
     }
 
     /* 배팅 종료 타이머(중앙 원형) */
-    .betTimer{
-      position:absolute;
-      left:50%;
-      top:52%;
-      transform:translate(-50%,-50%);
-      width:92px;
-      height:92px;
-      border-radius:999px;
-      display:grid;
-      place-items:center;
-      z-index:16;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
-    }
-    .betTimer.show{
+        .betTimer.show{
       opacity:1;
-      transform:translate(-50%,-50%) scale(1.02);
+      transform:translateX(-50%) scale(1.02);
     }
     .betTimer .ring{
       position:absolute;
@@ -579,7 +564,7 @@
       position:absolute;
       left:50%;
       top:44%;
-      transform:translate(-50%,-50%);
+      transform:translateX(-50%);
       width:min(520px, 92%);
       border-radius:14px;
       overflow:hidden;
@@ -630,7 +615,7 @@
       position:absolute;
       left:50%;
       top:62%;
-      transform:translate(-50%,-50%);
+      transform:translateX(-50%);
       width:46px;height:46px;border-radius:999px;
       display:flex;align-items:center;justify-content:center;
       font-weight:1000;font-size:11px;color:rgba(10,10,12,.92);
@@ -666,8 +651,8 @@
       position:absolute;
       right:18px;
       bottom:14px;
-      width:220px;
-      height:160px;
+      width:440px;
+      height:176px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.92);
@@ -680,29 +665,22 @@
       width:100%;
       height:100%;
       background:
-        linear-gradient(0deg, rgba(0,0,0,.08) 1px, transparent 1px) 0 0 / 22px 22px,
-        linear-gradient(90deg, rgba(0,0,0,.08) 1px, transparent 1px) 0 0 / 22px 22px;
+        linear-gradient(0deg, rgba(0,0,0,.08) 1px, transparent 1px) 0 0 / 14px 14px,
+        linear-gradient(90deg, rgba(0,0,0,.08) 1px, transparent 1px) 0 0 / 14px 14px;
       border-radius:10px;
       position:relative;
       overflow:hidden;
-    }
-
-    /* ✅ 결과 기록: 세로로 쌓기 */
-    .roadCol{
-      position:absolute;
-      left:8px;
-      top:8px;
-      bottom:8px;
-      width:28px;
-      display:flex;
-      flex-direction:column-reverse; /* 아래에서 위로 쌓이게 */
-      gap:6px;
-      align-items:center;
-      justify-content:flex-start;
+      display:grid;
+      grid-template-columns: repeat(27, 14px);
+      grid-template-rows: repeat(6, 14px);
+      align-content:start;
+      justify-content:start;
+      gap:0;
+      padding:8px;
     }
 
     .dotRes{
-      width:18px;height:18px;
+      width:12px;height:12px;
       border-radius:999px;
       background:#fff;
       border:3px solid #000;
@@ -713,7 +691,7 @@
     .dotRes::after{
       content:"";
       position:absolute;
-      inset:4px;
+      inset:3px;
       border-radius:999px;
       background:#fff; /* 가운데 뚫린 느낌 */
     }
@@ -763,7 +741,7 @@
       position:absolute;
       left:50%;
       top:44%;
-      transform:translate(-50%,-50%);
+      transform:translateX(-50%);
       width:54px;height:54px;
       border-radius:999px;
       display:flex;
@@ -785,7 +763,7 @@
     }
     .scoreBadge.show{
       opacity:1;
-      transform:translate(-50%,-50%) scale(1.02);
+      transform:translateX(-50%) scale(1.02);
     }
     .scoreP{
       background:
@@ -808,7 +786,7 @@
       position:absolute;
       left:50%;
       top:46%;
-      transform:translate(-50%,-50%);
+      transform:translateX(-50%);
       width:min(420px, 92%);
       border-radius:14px;
       border:1px solid rgba(255,255,255,.16);
@@ -891,6 +869,127 @@
     .scoreNum.player{ left:66%; }  /* PLAYER 영역 안쪽 */
     .scoreNum.banker{ right:66%; } /* BANKER 영역 안쪽 */
 
+  
+    /* ===== 결과 배너(요청 스타일: 끝으로 갈수록 투명) ===== */
+    .resultBanner{
+      position:absolute;
+      left:50%;
+      top:44%;
+      transform:translateX(-50%);
+      width:min(520px, 92%);
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 26px 80px rgba(0,0,0,.65);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+      z-index:28;
+      overflow:hidden;
+      background:
+        linear-gradient(90deg,
+          rgba(0,0,0,.70) 0%,
+          rgba(0,0,0,.62) 60%,
+          rgba(0,0,0,.00) 100%);
+      backdrop-filter: blur(8px);
+    }
+    .resultBanner.show{
+      opacity:1;
+      transform:translate(-50%,-50%) scale(1.01);
+    }
+    .rbTop{
+      padding:9px 14px;
+      font-weight:1000;
+      letter-spacing:.06em;
+      font-size:13px;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.00), rgba(0,0,0,.00)),
+        linear-gradient(90deg, rgba(0,150,255,.92), rgba(0,90,255,.82));
+    }
+    .rbTop .dots{
+      letter-spacing:.25em;
+      opacity:.85;
+      font-weight:1200;
+    }
+    .rbBody{
+      padding:10px 14px 12px;
+      text-align:center;
+    }
+    .rbBody .line1{
+      font-weight:1000;
+      font-size:13px;
+      letter-spacing:.02em;
+      color:rgba(255,255,255,.88);
+      margin-bottom:4px;
+    }
+    .rbBody .amount{
+      font-weight:1200;
+      font-size:22px;
+      letter-spacing:.01em;
+      color:#fff;
+      text-shadow:0 10px 22px rgba(0,0,0,.5);
+    }
+    .rbPlayer .rbTop{ background: linear-gradient(90deg, rgba(0,150,255,.92), rgba(0,90,255,.82)); }
+    .rbBanker .rbTop{ background: linear-gradient(90deg, rgba(255,80,80,.92), rgba(200,30,30,.85)); }
+    .rbTie .rbTop{ background: linear-gradient(90deg, rgba(0,210,140,.92), rgba(0,140,90,.82)); }
+    .resultBanner.compact .rbBody{ display:none; }
+
+    /* ===== 점수(숫자합) - 좌측 타원형 반투명 ===== */
+    .scorePill{
+      position:absolute;
+      left:14px;
+      top:14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.32);
+      backdrop-filter: blur(10px);
+      box-shadow:0 18px 44px rgba(0,0,0,.45);
+      z-index:10;
+      opacity:0;
+      transition: opacity .18s ease, transform .18s ease;
+      transform: translateY(-2px);
+      pointer-events:none;
+    }
+    .scorePill.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+    .scorePill .lab{
+      font-weight:1100;
+      font-size:11px;
+      opacity:.85;
+      letter-spacing:.08em;
+    }
+    .scorePill .num{
+      font-weight:1200;
+      font-size:22px;
+      letter-spacing:.02em;
+      color:#fff;
+      text-shadow:0 10px 22px rgba(0,0,0,.55);
+      min-width:16px;
+      text-align:center;
+    }
+    .scorePill .lab.p{ color: rgba(110,180,255,.95); }
+    .scorePill .lab.b{ color: rgba(255,140,140,.95); }
+    .scorePill .sep{
+      width:1px;
+      height:18px;
+      background: rgba(255,255,255,.18);
+      border-radius:999px;
+      margin:0 2px;
+    }
+
+    /* ===== 중앙 원형 타이머가 테이블에 안 가리도록 ===== */
+    .tableWrap{ z-index:10; }
+    .betTimer{ z-index:30 !important; }
+
   </style>
 </head>
 
@@ -923,17 +1022,19 @@
 
       <!-- 결과 배너 -->
       <div class="resultBanner" id="resultBanner">
-        <div class="rbTop" id="rbTop">PLAYER</div>
-        <div class="rbBody">
-          <div class="line1" id="rbLine1">승리</div>
+        <div class="rbTop" id="rbTop"><span class="dots">•••</span><span id="rbTopText">플레이어</span></div>
+        <div class="rbBody" id="rbBody">
+          <div class="line1" id="rbLine1">이겼습니다</div>
           <div class="amount" id="rbAmount">₩0</div>
         </div>
       </div>
 
-      <!-- 승리/결과 토스트(카드 위) -->
-      <div class="winToast" id="winToast">
-        <div class="wtTop" id="wtTop"><span class="spark"></span><span class="spark"></span><span class="spark"></span><span id="wtTopText">플레이어</span></div>
-        <div class="wtBody">
+<div class="rbBody">
+          <div class="line1" id="rbLine1">승리</div>
+          <div class="amount" id="rbAmount">₩0</div>
+        </div>
+      </div>
+<div class="wtBody">
           <div class="line1" id="wtLine1">이겼습니다</div>
           <div class="amount" id="wtAmount">₩0</div>
         </div>
@@ -942,13 +1043,17 @@
       <!-- 테이블 -->
       <div class="tableWrap">
         <div class="tableSurface">
-          <div class="zones">
+          <div class="scorePill" id="scorePill" aria-label="점수">
+  <span class="lab p">P</span><span class="num p" id="scoreP">0</span>
+  <span class="sep"></span>
+  <span class="lab b">B</span><span class="num b" id="scoreB">0</span>
+</div>
+<div class="zones">
             <div class="zone player" data-zone="player">
               <div class="zoneHeader">PLAYER</div>
               <div class="odds">1:1</div>
               <div class="betTotal">베팅: <b id="betPlayer">0</b></div>
-              <div class="scoreNum player" id="scoreP">0</div>
-              <div class="cardRow" id="rowPlayer">
+<div class="cardRow" id="rowPlayer">
                 <div class="cardSlot" data-slot="p0"></div>
                 <div class="cardSlot" data-slot="p1"></div>
                 <div class="cardSlot" data-slot="p2"></div>
@@ -968,8 +1073,7 @@
               <div class="zoneHeader">BANKER</div>
               <div class="odds">1:0.95</div>
               <div class="betTotal">베팅: <b id="betBanker">0</b></div>
-              <div class="scoreNum banker" id="scoreB">0</div>
-              <div class="cardRow" id="rowBanker">
+<div class="cardRow" id="rowBanker">
                 <div class="cardSlot" data-slot="b0"></div>
                 <div class="cardSlot" data-slot="b1"></div>
                 <div class="cardSlot" data-slot="b2"></div>
@@ -991,23 +1095,18 @@
 
         <!-- 중앙: 칩 -->
         <div class="hudBox chipBox">
-          <div class="chipRack" id="chipRack"></div>
-        </div>
-
-        <!-- 우측: 되돌리기/초기화 -->
-        <div class="hudBox actionBox">
-          <div class="actions">
-            <button class="btn" id="btnUndo" type="button">되돌리기</button>
-            <button class="btn" id="btnClear" type="button">초기화</button>
+          <div class="chipBoxInner">
+            <div class="chipRack" id="chipRack"></div>
+            <button class="undoMini" id="btnUndo" type="button" title="되돌리기">↶</button>
           </div>
         </div>
-      </div>
+
+        </div>
+</div>
 
       <!-- 우측하단 그림장(독립) -->
       <div class="road" aria-label="결과 그림장">
-        <div class="roadGrid">
-          <div class="roadCol" id="roadCol"></div>
-        </div>
+        <div class="roadGrid" id="roadGrid"></div>
       </div>
 
     </div>
@@ -1100,62 +1199,13 @@ refreshMoneyUI();
 function setScoreBadges(p, b){
   const sp = document.getElementById("scoreP");
   const sb = document.getElementById("scoreB");
-  if(sp){ sp.textContent = String(p ?? 0); sp.classList.add("show"); }
-  if(sb){ sb.textContent = String(b ?? 0); sb.classList.add("show"); }
+  const pill = document.getElementById("scorePill");
+  if(sp) sp.textContent = String(p ?? 0);
+  if(sb) sb.textContent = String(b ?? 0);
+  pill?.classList.add("show");
 }
 function hideScoreBadges(){
-  ["scoreP","scoreB"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.classList.remove("show");
-  });
-}
-
-/** ===========
- * 승리 토스트(카드 위)
- * =========== */
-let winToastTimer = null;
-function showWinToast(winner, amount, compact=false){
-  const toast = document.getElementById("winToast");
-  if(!toast) return;
-  toast.classList.remove("wtPlayer","wtBanker","wtTie","compact");
-
-  const topText = document.getElementById("wtTopText");
-  const line1 = document.getElementById("wtLine1");
-  const amt = document.getElementById("wtAmount");
-
-  if(winner==="player"){
-    toast.classList.add("wtPlayer");
-    topText.textContent = "플레이어";
-  }else if(winner==="banker"){
-    toast.classList.add("wtBanker");
-    topText.textContent = "뱅커";
-  }else{
-    toast.classList.add("wtTie");
-    topText.textContent = "타이";
-  }
-
-  if(compact){
-    toast.classList.add("compact");
-    line1.textContent = "";
-    amt.textContent = "";
-  }else{
-    line1.textContent = "이겼습니다";
-    amt.textContent = fmtWon(amount);
-  }
-
-  toast.classList.add("show");
-
-  if(winToastTimer) clearTimeout(winToastTimer);
-  winToastTimer = setTimeout(()=> toast.classList.remove("show"), 3000); // ✅ 3초
-}
-function showLoseToast(winner){
-  // 적중실패: 상단(플레이어/뱅커/타이)만 표시
-  showWinToast(winner, 0, true);
-}
-
-function hideWinToast(){
-  const toast = document.getElementById("winToast");
-  toast?.classList.remove("show");
+  document.getElementById("scorePill")?.classList.remove("show");
 }
 
 
@@ -1267,10 +1317,6 @@ document.querySelectorAll(".zone").forEach(z=>{
 });
 
 /** 초기화/되돌리기 */
-document.getElementById("btnClear").addEventListener("click", ()=>{
-  if(dealing) return;
-  bets.player=0; bets.banker=0; bets.tie=0;
-  ["player","banker","tie"].forEach(z=>placeChipVisual(z,0));
   betStack.length = 0;
   refreshMoneyUI();
 });
@@ -1352,7 +1398,6 @@ function makeCardElement(code){
 }
 function clearCards(){
   document.querySelectorAll(".cardSlot").forEach(s=>s.innerHTML="");
-  hideWinToast();
   hideScoreBadges();
 }
 
@@ -1374,7 +1419,7 @@ function showResultBanner(winner, amount, compact=false){
   const banner = document.getElementById("resultBanner");
   banner.classList.remove("rbPlayer","rbBanker","rbTie","compact");
 
-  const top = document.getElementById("rbTop");
+  const top = document.getElementById("rbTopText");
   const line1 = document.getElementById("rbLine1");
   const amt = document.getElementById("rbAmount");
 
@@ -1412,37 +1457,64 @@ function showResultBanner(winner, amount, compact=false){
  * - T: 이전 결과 위에 초록 빗금
  * =========== */
 function roadPush(winner){
-  const col = document.getElementById("roadCol");
-  const items = [...col.querySelectorAll(".dotRes")];
+  const grid = document.getElementById("roadGrid");
+  if(!grid) return;
+
+  // state kept on window
+  const st = window.__roadState || { col:0, row:0, lastCell:null };
+  const ROWS = 6;
+  const COLS = 27;
+
+  function cellIndex(col,row){ return row*COLS + col; }
+
+  function placeDot(col,row, cls){
+    if(col<0 || col>=COLS || row<0 || row>=ROWS) return null;
+    const dot = document.createElement("div");
+    dot.className = "dotRes " + cls;
+    dot.style.gridColumn = String(col+1);
+    dot.style.gridRow = String(row+1);
+    grid.appendChild(dot);
+    st.lastCell = dot;
+    return dot;
+  }
 
   if(winner==="tie"){
-    const last = items[0]; // column-reverse라 첫번째가 최근
+    const last = st.lastCell;
     if(last){
       if(!last.querySelector(".tieSlash")){
         const slash = document.createElement("div");
         slash.className = "tieSlash";
         last.appendChild(slash);
       }
-      return;
     }
-    // 첫 결과가 타이면 그냥 점 하나 만들고 빗금
-    const dot = document.createElement("div");
-    dot.className = "dotRes dotP";
-    dot.innerHTML = `<div class="tieSlash"></div>`;
-    col.appendChild(dot);
+    window.__roadState = st;
     return;
   }
 
-  const dot = document.createElement("div");
-  dot.className = "dotRes " + (winner==="player" ? "dotP" : "dotB");
-  col.appendChild(dot);
-
-  // 최대 10개만 유지(원하면 늘려도 됨)
-  while(col.children.length > 10){
-    col.removeChild(col.children[0]);
+  // advance row/col
+  if(st.row >= ROWS){
+    st.row = 0;
+    st.col += 1;
   }
-}
+  if(st.col >= COLS){
+    // shift left by 1 column when overflow
+    const children = [...grid.children];
+    children.forEach(el=>{
+      const gc = parseInt(el.style.gridColumn || "1", 10) - 1;
+      if(gc <= 1){
+        el.remove();
+      }else{
+        el.style.gridColumn = String(gc - 1);
+      }
+    });
+    st.col = COLS - 1;
+  }
 
+  placeDot(st.col, st.row, winner==="player" ? "dotP" : "dotB");
+  st.row += 1;
+
+  window.__roadState = st;
+}
 /** ===========
  * 베팅 타이머 자동 진행(11초 → 1초 후 딜)
  * =========== */
@@ -1466,10 +1538,7 @@ function startBettingPhase(){
   setBetTimerVisible(true);
 
   // 버튼 활성
-  document.getElementById("btnUndo").disabled = false;
-  document.getElementById("btnClear").disabled = false;
-
-  if(timerInt) clearInterval(timerInt);
+  document.getElementById("btnUndo").disabled = false;  if(timerInt) clearInterval(timerInt);
   timerInt = setInterval(async ()=>{
     betCountdown--;
     document.getElementById("betTimerNum").textContent = String(betCountdown);
@@ -1480,10 +1549,7 @@ function startBettingPhase(){
             document.getElementById("betTimerNum").textContent = "0";
 
       // 베팅 잠금
-      document.getElementById("btnUndo").disabled = true;
-      document.getElementById("btnClear").disabled = true;
-
-      // 1초 뒤 딜 시작
+      document.getElementById("btnUndo").disabled = true;      // 1초 뒤 딜 시작
       await sleep(1000);
       setBetTimerVisible(false);
 
@@ -1525,10 +1591,7 @@ async function dealRound(){
   bettingOpen = false;
 
   // 베팅 중에 누르지 못하게
-  document.getElementById("btnUndo").disabled = true;
-  document.getElementById("btnClear").disabled = true;
-
-  clearCards();
+  document.getElementById("btnUndo").disabled = true;  clearCards();
   setScoreBadges(0,0);
 
   let totalBet = bets.player + bets.banker + bets.tie;
@@ -1651,12 +1714,10 @@ async function dealRound(){
   if(delta >= 0){
     sfx("win");
     showResultBanner(winner, displayWinAmount, false);
-    showWinToast(winner, displayWinAmount, false);
   }else{
     sfx("lose");
     // ✅ 적중실패: 금액/문구 없이 상단(플레이어/뱅커/타이)만
     showResultBanner(winner, 0, true);
-    showLoseToast(winner);
   }
 
   // 베팅/칩 초기화
