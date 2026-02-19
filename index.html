@@ -4,47 +4,132 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>로그인</title>
+  <link rel="stylesheet" href="./assets/app.css" />
 </head>
 <body>
-  <h2>로그인</h2>
+  <div class="page">
+    <div class="card">
+      <div class="brand">
+        <div class="logo"></div>
+        <h1>로그인</h1>
+        <p class="sub">이메일과 비밀번호를 입력해 주세요.</p>
+      </div>
 
-  <input id="email" placeholder="이메일"><br><br>
-  <input id="pw" type="password" placeholder="비밀번호"><br><br>
+      <form id="loginForm" autocomplete="on">
+        <label class="field">
+          <span>이메일</span>
+          <div class="inputWrap">
+            <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+        </label>
 
-  <button onclick="login()">로그인</button>
-  <p id="msg"></p>
+        <label class="field">
+          <span>비밀번호</span>
+          <div class="inputWrap">
+            <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password" required />
+            <button class="iconBtn" type="button" id="togglePw" aria-label="비밀번호 보기/숨기기">👁</button>
+          </div>
+        </label>
 
-  <p>계정 없으면 <a href="signup.html">회원가입</a></p>
+        <div class="row">
+          <label class="check">
+            <input type="checkbox" id="remember" />
+            <span>로그인 유지</span>
+          </label>
+          <a class="link" href="./signup.html">회원가입</a>
+        </div>
+
+        <button class="btn" id="submitBtn" type="submit">
+          <span class="spinner"></span>
+          <span id="btnText">로그인</span>
+        </button>
+
+        <p class="msg" id="msg"></p>
+      </form>
+
+      <div class="footer">
+        <span>계정이 없나요?</span> <a class="link" href="./signup.html">회원가입</a>
+      </div>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
- const firebaseConfig = {
-  apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
-  authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
-  projectId: "ace-baccarat-dfa2e",
-  storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
-  messagingSenderId: "609825096693",
-  appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
-  measurementId: "G-LRW1E07P1J"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0Hk4g0xOCTIC1RrZkY677AN08awPHBXk",
+      authDomain: "ace-baccarat-dfa2e.firebaseapp.com",
+      projectId: "ace-baccarat-dfa2e",
+      storageBucket: "ace-baccarat-dfa2e.firebasestorage.app",
+      messagingSenderId: "609825096693",
+      appId: "1:609825096693:web:6fd2d2cf5767024cca16bc",
+      measurementId: "G-LRW1E07P1J"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.login = async function () {
-      const email = document.getElementById("email").value.trim();
-      const pw = document.getElementById("pw").value;
-      const msg = document.getElementById("msg");
-      msg.textContent = "로그인 중...";
+    const $ = (id) => document.getElementById(id);
+    const form = $("loginForm");
+    const msg = $("msg");
+    const btn = $("submitBtn");
+    const btnText = $("btnText");
+    const emailEl = $("email");
+    const pwEl = $("pw");
+    const rememberEl = $("remember");
+
+    $("togglePw").addEventListener("click", () => {
+      pwEl.type = (pwEl.type === "password") ? "text" : "password";
+    });
+
+    function setMessage(text, type){
+      msg.textContent = text || "";
+      msg.classList.remove("err","ok");
+      if(type) msg.classList.add(type);
+    }
+
+    function friendlyError(e){
+      const code = e?.code || "";
+      if (code.includes("auth/invalid-email")) return "이메일 형식이 올바르지 않아요.";
+      if (code.includes("auth/missing-password")) return "비밀번호를 입력해 주세요.";
+      if (code.includes("auth/invalid-credential")) return "이메일 또는 비밀번호가 올바르지 않아요.";
+      if (code.includes("auth/user-disabled")) return "비활성화된 계정이에요.";
+      if (code.includes("auth/too-many-requests")) return "시도가 너무 많아요. 잠시 후 다시 시도해 주세요.";
+      return "로그인에 실패했어요. 다시 시도해 주세요.";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = emailEl.value.trim();
+      const pw = pwEl.value;
+
+      setMessage("로그인 중...", "");
+      btn.disabled = true;
+      btn.classList.add("loading");
+      btnText.textContent = "로그인 중...";
 
       try {
+        await setPersistence(auth, rememberEl.checked ? browserLocalPersistence : browserSessionPersistence);
         await signInWithEmailAndPassword(auth, email, pw);
-        location.href = "home.html";
-      } catch (e) {
-        msg.textContent = "로그인 실패: " + (e?.message ?? e);
+        setMessage("로그인 성공! 이동 중...", "ok");
+        location.href = "./home.html";
+      } catch (err) {
+        setMessage(friendlyError(err), "err");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove("loading");
+        btnText.textContent = "로그인";
       }
-    };
+    });
   </script>
 </body>
 </html>
